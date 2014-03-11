@@ -2,28 +2,19 @@ package com.tgame.mods.libs.multiblocks.grid;
 
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
+import com.tgame.mods.coremod.TgameCore;
 import com.tgame.mods.libs.multiblocks.WorldPos;
 import cpw.mods.fml.common.eventhandler.Event;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent;
-import io.netty.buffer.ByteBuf;
-import io.netty.buffer.ByteBufAllocator;
-import io.netty.buffer.ByteBufProcessor;
 import io.netty.buffer.Unpooled;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.network.PacketBuffer;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
-import java.nio.channels.GatheringByteChannel;
-import java.nio.channels.ScatteringByteChannel;
-import java.nio.charset.Charset;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @since 10/03/14
@@ -88,11 +79,12 @@ public class Grid implements IGrid
     {
         if (saveDelegate == null)
         {
-            for (IGridNode node : gridMap)
+            for (Map.Entry<WorldPos, IGridNode> node : gridMap.entrySet())
             {
-                if (node.canBeDelegate())
+                if (node.getValue().canBeDelegate())
                 {
-                    this.saveDelegate = node;
+                    TgameCore.LOGGER.info("Node at " + node.getKey() + " is a save Manager");
+                    this.saveDelegate = node.getValue();
                     return this.saveDelegate;
                 }
             }
@@ -101,6 +93,7 @@ public class Grid implements IGrid
         return this.saveDelegate;
     }
 
+    @Override
     public void writeToDelegate()
     {
         NBTTagCompound nbttag = new NBTTagCompound();
@@ -110,10 +103,11 @@ public class Grid implements IGrid
             nbttag.setByteArray(gridTicker.nbtKeyTag(), gridTicker.saveData().array());
         }
 
-        getSaveDelegate().saveGridData(nbttag)
+        getSaveDelegate().saveGridData(nbttag, IGrid.NBT_SAVE_KEY);
 
     }
 
+    @Override
     public void readFromDelegate(NBTTagCompound tag)
     {
         NBTTagCompound nbt = tag.getCompoundTag(IGrid.NBT_SAVE_KEY);
