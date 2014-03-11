@@ -24,15 +24,42 @@ public class WorldPos implements Comparable<WorldPos>, Cloneable
     }
 
 
+    /**
+     *
+     * @param other - other value
+     * @return a hacky compareTo, based on priority corner location
+     */
     @Override
-    public int compareTo (WorldPos o)
+    public int compareTo (WorldPos other)
     {
-        if (y > o.y)
+        if (this.x < other.x)
         {
-            return (y - o.y) + (x - o.x) + (z - o.z);
+            return -1;
         }
-
-        return (o.y - y) + (o.x - x) + (o.z - z);
+        else if (this.x > other.x)
+        {
+            return 1;
+        }
+        else if (this.y < other.y)
+        {
+            return -1;
+        }
+        else if (this.y > other.y)
+        {
+            return 1;
+        }
+        else if (this.z < other.z)
+        {
+            return -1;
+        }
+        else if (this.z > other.z)
+        {
+            return 1;
+        }
+        else
+        {
+            return 0;
+        }
     }
 
     public int getX ()

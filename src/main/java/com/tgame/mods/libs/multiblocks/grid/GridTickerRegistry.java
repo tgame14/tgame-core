@@ -9,14 +9,14 @@ import java.util.List;
  */
 public final class GridTickerRegistry
 {
-    protected static List<Class<? extends IGridTicker>> gridTickerRegistry = new LinkedList<Class<? extends IGridTicker>>();
+    protected static List<Class<? extends IGridTicker>> TickerClasses = new LinkedList<Class<? extends IGridTicker>>();
 
     public static boolean register(Class<? extends IGridTicker> clazz)
     {
-        if (gridTickerRegistry.contains(clazz))
+        if (TickerClasses.contains(clazz))
             return false;
 
-        gridTickerRegistry.add(clazz);
+        TickerClasses.add(clazz);
         return true;
     }
 }

@@ -1,40 +1,37 @@
 package com.tgame.mods.libs.multiblocks.grid;
 
-import com.google.common.collect.BiMap;
-import com.google.common.collect.HashBiMap;
 import com.tgame.mods.coremod.TgameCore;
-import com.tgame.mods.libs.multiblocks.WorldPos;
 import cpw.mods.fml.common.eventhandler.Event;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent;
 import io.netty.buffer.Unpooled;
 import net.minecraft.nbt.NBTTagCompound;
-import org.apache.logging.log4j.Level;
 
 import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
+import java.util.Set;
 
 /**
  * @since 10/03/14
  * @author tgame14
  */
-@SuppressWarnings("unused")
 public class Grid implements IGrid
 {
 
-    private BiMap<WorldPos, IGridNode> gridMap;
+    private Set<IGridNode> nodeSet;
     private List<IGridTicker> gridTickers;
     private IGridNode saveDelegate;
 
     public Grid (IGridNode node)
     {
-        this.gridMap = HashBiMap.create();
-        this.gridTickers = new ArrayList<IGridTicker>(GridTickerRegistry.gridTickerRegistry.size());
+        this.nodeSet = new HashSet<IGridNode>();
+        this.nodeSet.add(node);
 
-        for (Class<? extends IGridTicker> clazz : GridTickerRegistry.gridTickerRegistry)
+        this.gridTickers = new ArrayList<IGridTicker>(GridTickerRegistry.TickerClasses.size());
+
+        for (Class<? extends IGridTicker> clazz : GridTickerRegistry.TickerClasses)
         {
             for (Constructor<?> con : clazz.getConstructors())
             {
@@ -47,14 +44,15 @@ public class Grid implements IGrid
                 }
                 catch (Exception e)
                 {
-                    TgameCore.LOGGER.fatal("A IGridTicker doesnt have a Constructor with IGrid in it! This is an error", e);
+                    TgameCore.LOGGER.fatal("An IGridTicker doesn't have a Constructor with IGrid in it! This is an error", e);
                 }
             }
         }
     }
 
+    @Override
     @SubscribeEvent
-    public void tickEvent(TickEvent event)
+    public void tickEvent (TickEvent event)
     {
         if (event.phase == TickEvent.Phase.START && event.type == TickEvent.Type.WORLD)
         {
@@ -83,32 +81,40 @@ public class Grid implements IGrid
 
     }
 
-    public IGridNode getSaveDelegate()
+    public IGridNode getSaveDelegate ()
     {
         if (saveDelegate == null)
         {
-            for (Map.Entry<WorldPos, IGridNode> node : gridMap.entrySet())
+            IGridNode candidate = null;
+            for (IGridNode node : nodeSet)
             {
-                if (node.getValue().canBeDelegate())
+                if (node.canBeDelegate())
                 {
-                    TgameCore.LOGGER.info("Node at " + node.getKey() + " is a save Manager");
-                    this.saveDelegate = node.getValue();
-                    return this.saveDelegate;
+                    if (candidate == null)
+                    {
+                        candidate = node;
+                    }
+
+                    else if (node.getWorldPos().compareTo(candidate.getWorldPos()) == 1)
+                    {
+                        candidate = node;
+                    }
                 }
             }
+            saveDelegate = candidate;
         }
 
         return this.saveDelegate;
     }
 
     @Override
-    public void writeToDelegate()
+    public void writeToDelegate ()
     {
         NBTTagCompound nbttag = new NBTTagCompound();
 
         for (IGridTicker gridTicker : gridTickers)
         {
-            nbttag.setByteArray(gridTicker.nbtKeyTag(), gridTicker.saveData().array());
+            nbttag.setByteArray(gridTicker.getClass().getName(), gridTicker.saveData().array());
         }
 
         getSaveDelegate().saveGridData(nbttag, IGrid.NBT_SAVE_KEY);
@@ -116,13 +122,13 @@ public class Grid implements IGrid
     }
 
     @Override
-    public void readFromDelegate(NBTTagCompound tag)
+    public void readFromDelegate (NBTTagCompound tag)
     {
         NBTTagCompound nbt = tag.getCompoundTag(IGrid.NBT_SAVE_KEY);
 
         for (IGridTicker gridTicker : gridTickers)
         {
-            gridTicker.readData(Unpooled.wrappedBuffer(nbt.getByteArray(gridTicker.nbtKeyTag())));
+            gridTicker.loadData(Unpooled.wrappedBuffer(nbt.getByteArray(gridTicker.getClass().getName())));
         }
 
     }

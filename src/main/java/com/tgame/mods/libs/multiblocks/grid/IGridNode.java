@@ -13,8 +13,6 @@ public interface IGridNode
 {
     public WorldPos getWorldPos();
 
-    public boolean PowerConsumePerTick();
-
     public IGrid getGrid();
 
     public void setGrid();
