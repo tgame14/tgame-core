@@ -47,7 +47,7 @@ public class Grid implements IGrid
                 }
                 catch (Exception e)
                 {
-                    TgameCore.LOGGER.catching(Level.ERROR, e);
+                    TgameCore.LOGGER.fatal("A IGridTicker doesnt have a Constructor with IGrid in it! This is an error", e);
                 }
             }
         }
