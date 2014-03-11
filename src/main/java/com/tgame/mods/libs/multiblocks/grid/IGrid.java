@@ -2,6 +2,7 @@ package com.tgame.mods.libs.multiblocks.grid;
 
 import cpw.mods.fml.common.eventhandler.Event;
 import cpw.mods.fml.common.gameevent.TickEvent;
+import net.minecraft.nbt.NBTTagCompound;
 
 /**
  * @since 11/03/14
@@ -16,6 +17,10 @@ public interface IGrid
     public IGridTicker getGridTicker(Class<? extends IGridTicker> clazz);
 
     public void postEventToGrid(Event event);
+
+    public void writeToDelegate();
+
+    public void readFromDelegate(NBTTagCompound nbt);
 
 
 }
