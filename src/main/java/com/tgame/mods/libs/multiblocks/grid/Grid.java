@@ -9,6 +9,7 @@ import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent;
 import io.netty.buffer.Unpooled;
 import net.minecraft.nbt.NBTTagCompound;
+import org.apache.logging.log4j.Level;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -28,7 +29,7 @@ public class Grid implements IGrid
     private List<IGridTicker> gridTickers;
     private IGridNode saveDelegate;
 
-    public Grid(IGridNode node) throws IllegalAccessException, InvocationTargetException, InstantiationException
+    public Grid (IGridNode node)
     {
         this.gridMap = HashBiMap.create();
         this.gridTickers = new ArrayList<IGridTicker>(GridTickerRegistry.gridTickerRegistry.size());
@@ -37,9 +38,16 @@ public class Grid implements IGrid
         {
             for (Constructor<?> con : clazz.getConstructors())
             {
-                if (con.getParameterTypes().length == 1 && con.getParameterTypes()[0].isInstance(this))
+                try
                 {
-                    gridTickers.add((IGridTicker) con.newInstance(this));
+                    if (con.getParameterTypes().length == 1 && con.getParameterTypes()[0].isInstance(this))
+                    {
+                        gridTickers.add((IGridTicker) con.newInstance(this));
+                    }
+                }
+                catch (Exception e)
+                {
+                    TgameCore.LOGGER.catching(Level.ERROR, e);
                 }
             }
         }
@@ -116,7 +124,6 @@ public class Grid implements IGrid
         {
             gridTicker.readData(Unpooled.wrappedBuffer(nbt.getByteArray(gridTicker.nbtKeyTag())));
         }
-
 
     }
 
