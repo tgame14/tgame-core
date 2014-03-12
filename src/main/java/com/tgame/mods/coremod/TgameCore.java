@@ -7,6 +7,7 @@ import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
+import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.ThreadContext;
 
@@ -35,7 +36,7 @@ public class TgameCore implements IMod
 
     public TgameCore()
     {
-        LOGGER = org.apache.logging.log4j.LogManager.getLogger(TgameCore.ID);
+        LOGGER = LogManager.getLogger(TgameCore.ID);
         ThreadContext.put("side", FMLCommonHandler.instance().getSide().name().toLowerCase(Locale.ENGLISH));
     }
 
