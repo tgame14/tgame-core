@@ -146,7 +146,7 @@ public class PacketPipelineHandler extends MessageToMessageCodec<FMLProxyPacket,
     @Override
     public void init ()
     {
-        this.channelEnumMap = NetworkRegistry.INSTANCE.newChannel(ModInfo.CHANNEL, this);
+        this.channelEnumMap = NetworkRegistry.INSTANCE.newChannel(TgameCore.CHANNEL, this);
     }
 
     /**
@@ -176,7 +176,7 @@ public class PacketPipelineHandler extends MessageToMessageCodec<FMLProxyPacket,
     @Override
     public String getModId ()
     {
-        return ModInfo.ID;
+        return TgameCore.ID;
     }
 
     /// *** THIS IS SPECIAL PACKET SENDING METHODS SIMILAR TO 1.6.4 IMPLEMENTATIONS *** ///

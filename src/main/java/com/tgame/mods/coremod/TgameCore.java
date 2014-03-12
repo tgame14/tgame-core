@@ -23,6 +23,7 @@ public class TgameCore implements IMod
     public static final String ID = "tgame-core";
     public static final String VERSION = "@VERSION@";
     public static final String NAME = "Tgame Core";
+    public static final String CHANNEL = "TGAME_CORE";
 
     public static Logger LOGGER;
 
