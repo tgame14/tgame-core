@@ -19,6 +19,9 @@ public class RegistryTransformer implements IClassTransformer
     @Override
     public byte[] transform (String name, String transformedName, byte[] bytes)
     {
+        if (transformedName.startsWith("net.minecraft") || transformedName.startsWith("cpw.mods.fml"))
+            return bytes;
+
         ClassNode cnode = ASMHelper.createClassNode(bytes);
 
         if (cnode.interfaces.contains(IRegisterable.class.getName()))

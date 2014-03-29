@@ -10,7 +10,7 @@ import net.minecraft.tileentity.TileEntity;
 @SuppressWarnings("unused")
 public interface IRegisterable
 {
-    void registerCallBack();
+    RegistryType getRegistryType();
 
     public enum RegistryType
     {
@@ -32,6 +32,6 @@ public interface IRegisterable
 
     public static interface IRegisterableEntity extends IRegisterable
     {
-        
+
     }
 }
