@@ -11,4 +11,12 @@ public enum Phase
     private static Phase phase = PRELAUNCH;
 
     public static Phase getPhase()
+    {
+        return phase;
+    }
+
+    public static void setPhase(Phase state)
+    {
+        phase = state;
+    }
 }

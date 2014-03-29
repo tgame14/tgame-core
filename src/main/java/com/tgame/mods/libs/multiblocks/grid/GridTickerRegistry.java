@@ -1,10 +1,6 @@
 package com.tgame.mods.libs.multiblocks.grid;
 
 import com.google.common.collect.ImmutableList;
-import com.tgame.mods.coremod.TgameCore;
-
-import java.util.LinkedList;
-import java.util.List;
 
 /**
  * @since 11/03/14
@@ -12,10 +8,17 @@ import java.util.List;
  */
 public final class GridTickerRegistry
 {
-    protected static ImmutableList.Builder<Class<? extends IGridTicker>> TickerClasses = new ImmutableList.Builder<Class<? extends IGridTicker>>();
+    private static ImmutableList.Builder<Class<? extends IGridTicker>> tickerBuilder = new ImmutableList.Builder<Class<? extends IGridTicker>>();
+    protected static ImmutableList<Class<? extends IGridTicker>> tickerClasses;
 
-    public static boolean register(Class<? extends IGridTicker> clazz)
+    public static void register(Class<? extends IGridTicker> clazz)
     {
+        tickerBuilder.add(clazz);
+    }
 
+    public static void postLoad()
+    {
+        tickerClasses = tickerBuilder.build();
+        tickerBuilder = null;
     }
 }
