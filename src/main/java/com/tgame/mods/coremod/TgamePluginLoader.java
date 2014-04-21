@@ -1,5 +1,6 @@
 package com.tgame.mods.coremod;
 
+import cpw.mods.fml.common.DummyModContainer;
 import cpw.mods.fml.relauncher.IFMLLoadingPlugin;
 
 import java.util.Map;
@@ -8,8 +9,8 @@ import java.util.Map;
  * @since 10/03/14
  * @author tgame14
  */
-@IFMLLoadingPlugin.TransformerExclusions(value = { "com.tgame.mods.coremod" } )
-public class TgamePluginLoader implements IFMLLoadingPlugin
+@IFMLLoadingPlugin.TransformerExclusions(value = { "com.tgame.mods.coremod.asm" } )
+public class TgamePluginLoader extends DummyModContainer implements IFMLLoadingPlugin
 {
     @Override
     public String[] getASMTransformerClass ()
