@@ -6,4 +6,20 @@ package com.tgame.mods.coremod;
  */
 public class CommonProxyBase
 {
+    public void preInit()
+    {
+
+    }
+
+    public void init()
+    {
+
+    }
+
+    public void postInit()
+    {
+
+    }
+
+
 }
