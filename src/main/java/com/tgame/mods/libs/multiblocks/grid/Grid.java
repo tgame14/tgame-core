@@ -29,9 +29,9 @@ public class Grid implements IGrid
         this.nodeSet = new HashSet<IGridNode>();
         this.nodeSet.add(node);
 
-        this.gridTickers = new ArrayList<IGridTicker>(GridTickerRegistry.TickerClasses.size());
+        this.gridTickers = new ArrayList<IGridTicker>(GridTickerRegistry.tickerClasses.size());
 
-        for (Class<? extends IGridTicker> clazz : GridTickerRegistry.TickerClasses)
+        for (Class<? extends IGridTicker> clazz : GridTickerRegistry.tickerClasses)
         {
             for (Constructor<?> con : clazz.getConstructors())
             {
