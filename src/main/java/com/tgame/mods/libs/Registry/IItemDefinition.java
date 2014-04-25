@@ -1,4 +1,4 @@
-package com.tgame.mods.libs.Registry;
+package com.tgame.mods.libs.registry;
 
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
