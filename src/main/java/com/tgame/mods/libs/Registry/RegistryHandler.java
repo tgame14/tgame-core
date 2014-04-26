@@ -21,7 +21,6 @@ public class RegistryHandler
     public IItemDefinition registerItem(Item item)
     {
         IItemDefinition itemdef = new ItemDefinition(item);
-
         return itemdef;
 
     }

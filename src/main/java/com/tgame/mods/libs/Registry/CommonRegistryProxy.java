@@ -13,14 +13,18 @@ public class CommonRegistryProxy
         GameRegistry.registerItem(itemDefinition.getItem(), itemDefinition.getItem().getUnlocalizedName().replaceAll("item.", "").replaceAll(".name", ""));
     }
 
-    public void registerBlock()
+    public void registerBlock(IItemDefinition itemDefinition)
     {
-
+        GameRegistry.registerBlock(itemDefinition.getBlock(), itemDefinition.getBlock().getUnlocalizedName().replaceAll("tile.", "").replaceAll(".name", ""));
+        if (itemDefinition.getTile() != null)
+        {
+            this.registerTile(itemDefinition);
+        }
     }
 
-    public void registerTile()
+    public void registerTile(IItemDefinition itemDefinition)
     {
-
+        GameRegistry.registerTileEntity(itemDefinition.getTile(), itemDefinition.getTile().getName());
     }
 
 }

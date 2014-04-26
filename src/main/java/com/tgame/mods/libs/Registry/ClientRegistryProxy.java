@@ -1,6 +1,7 @@
 package com.tgame.mods.libs.registry;
 
 import com.tgame.mods.coremod.Settings;
+import cpw.mods.fml.client.registry.ClientRegistry;
 import net.minecraftforge.client.MinecraftForgeClient;
 import org.apache.logging.log4j.Level;
 
@@ -14,11 +15,11 @@ public class ClientRegistryProxy extends CommonRegistryProxy
     public void registerItem (IItemDefinition itemDefinition)
     {
         super.registerItem(itemDefinition);
-        if (itemDefinition.getItem().getClass().getAnnotation(RegisterData.ItemData.class) != null)
+        if (itemDefinition.getItem().getClass().getAnnotation(Registry.ItemData.class) != null)
         {
             try
             {
-                MinecraftForgeClient.registerItemRenderer(itemDefinition.getItem(), itemDefinition.getItem().getClass().getAnnotation(RegisterData.ItemData.class).itemRenderer().newInstance());
+                MinecraftForgeClient.registerItemRenderer(itemDefinition.getItem(), itemDefinition.getItem().getClass().getAnnotation(Registry.ItemData.class).itemRenderer().newInstance());
             }
             catch (InstantiationException e)
             {
@@ -34,15 +35,33 @@ public class ClientRegistryProxy extends CommonRegistryProxy
     }
 
     @Override
-    public void registerBlock ()
+    public void registerBlock (IItemDefinition itemDefinition)
     {
-        super.registerBlock();
+        super.registerBlock(itemDefinition);
     }
 
     @Override
-    public void registerTile ()
+    public void registerTile (IItemDefinition itemDefinition)
     {
-        super.registerTile();
+        super.registerTile(itemDefinition);
+        Registry.TileData data = itemDefinition.getTile().getAnnotation(Registry.TileData.class);
+        if (data != null)
+        {
+            try
+            {
+                ClientRegistry.bindTileEntitySpecialRenderer(itemDefinition.getTile(), data.tesrClass().newInstance());
+            }
+            catch (InstantiationException e)
+            {
+                Settings.LOGGER.catching(Level.FATAL, e);
+                e.printStackTrace();
+            }
+            catch (IllegalAccessException e)
+            {
+                Settings.LOGGER.catching(Level.FATAL, e);
+                e.printStackTrace();
+            }
+        }
     }
 
 

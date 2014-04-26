@@ -11,7 +11,7 @@ import net.minecraftforge.client.IItemRenderer;
  * @since 25/04/14
  * @author tgame14
  */
-public class ItemDefinition implements IItemDefinition
+class ItemDefinition implements IItemDefinition
 {
     protected Block block;
     protected Class<? extends TileEntity> tileClass;
@@ -23,9 +23,9 @@ public class ItemDefinition implements IItemDefinition
     public ItemDefinition (Block block)
     {
         this.block = block;
-        if (this.block.getClass().getAnnotation(RegisterData.BlockData.class) != null)
+        if (this.block.getClass().getAnnotation(Registry.BlockData.class) != null)
         {
-            RegisterData.BlockData data = this.block.getClass().getAnnotation(RegisterData.BlockData.class);
+            Registry.BlockData data = this.block.getClass().getAnnotation(Registry.BlockData.class);
             this.tileClass = data.tileClass();
             this.itemBlockClass = data.itemBlock();
 
@@ -34,7 +34,12 @@ public class ItemDefinition implements IItemDefinition
 
     public ItemDefinition (Item item)
     {
-
+        this.item = item;
+        if (this.item.getClass().getAnnotation(Registry.ItemData.class) != null)
+        {
+            Registry.ItemData data = this.item.getClass().getAnnotation(Registry.ItemData.class);
+            this.itemRenderClass = data.itemRenderer();
+        }
     }
 
     @Override
@@ -44,9 +49,21 @@ public class ItemDefinition implements IItemDefinition
     }
 
     @Override
+    public Class<? extends ItemBlock> getItemBlockClass ()
+    {
+        return this.itemBlockClass;
+    }
+
+    @Override
     public Item getItem ()
     {
-        return item;
+        return this.item;
+    }
+
+    @Override
+    public Class<? extends IItemRenderer> getIItemRendererClass ()
+    {
+        return this.itemRenderClass;
     }
 
     @Override

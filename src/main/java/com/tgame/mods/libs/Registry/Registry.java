@@ -9,7 +9,7 @@ import net.minecraftforge.client.IItemRenderer;
  * @since 25/04/14
  * @author tgame14
  */
-public @interface RegisterData
+public @interface Registry
 {
     public static @interface BlockData
     {
