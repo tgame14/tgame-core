@@ -9,7 +9,7 @@ import net.minecraft.item.Item;
  */
 public abstract class ItemBase extends Item
 {
-    public ItemBase(CreativeTabs tab)
+    public ItemBase(CreativeTabs tab, String domain)
     {
         super();
         this.setCreativeTab(tab);
