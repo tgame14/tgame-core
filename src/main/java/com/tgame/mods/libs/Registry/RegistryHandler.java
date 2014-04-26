@@ -15,12 +15,15 @@ public class RegistryHandler
 
     public IItemDefinition registerBlock(Block block)
     {
-        return new ItemDefinition(block);
+        IItemDefinition itemdef = new ItemDefinition(block);
+        registryProxy.registerBlock(itemdef);
+        return itemdef;
     }
 
     public IItemDefinition registerItem(Item item)
     {
         IItemDefinition itemdef = new ItemDefinition(item);
+        registryProxy.registerItem(itemdef);
         return itemdef;
 
     }

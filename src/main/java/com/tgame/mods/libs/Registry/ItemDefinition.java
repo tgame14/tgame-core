@@ -75,6 +75,7 @@ class ItemDefinition implements IItemDefinition
     @Override
     public boolean sameAs (ItemStack comparableItem)
     {
+        //TODO: Implement
         return false;
     }
 }
