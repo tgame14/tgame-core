@@ -19,7 +19,7 @@ public class ClientRegistryProxy extends CommonRegistryProxy
         {
             try
             {
-                MinecraftForgeClient.registerItemRenderer(itemDefinition.getItem(), itemDefinition.getItem().getClass().getAnnotation(Registry.ItemData.class).itemRenderer().newInstance());
+                MinecraftForgeClient.registerItemRenderer(itemDefinition.getItem(), itemDefinition.getIItemRendererClass().newInstance());
             }
             catch (InstantiationException e)
             {

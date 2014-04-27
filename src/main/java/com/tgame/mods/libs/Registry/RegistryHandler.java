@@ -1,7 +1,9 @@
 package com.tgame.mods.libs.registry;
 
 import cpw.mods.fml.common.SidedProxy;
+import cpw.mods.fml.common.registry.EntityRegistry;
 import net.minecraft.block.Block;
+import net.minecraft.entity.Entity;
 import net.minecraft.item.Item;
 
 /**
@@ -25,6 +27,12 @@ public class RegistryHandler
         IItemDefinition itemdef = new ItemDefinition(item);
         registryProxy.registerItem(itemdef);
         return itemdef;
+
+    }
+
+    public void registerEntity(Class<? extends Entity> clazz)
+    {
+        EntityRegistry.registerGlobalEntityID(clazz, clazz.getSimpleName(), EntityRegistry.findGlobalUniqueEntityId());
 
     }
 
