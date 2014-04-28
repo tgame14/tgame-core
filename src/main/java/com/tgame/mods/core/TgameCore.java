@@ -18,17 +18,10 @@ import java.util.Locale;
  * @author tgame14
  */
 @SuppressWarnings("unused")
-@Mod(modid = TgameCore.ID, version = TgameCore.VERSION, name = TgameCore.NAME)
+@Mod(modid = Settings.MODID, version = Settings.VERSION, name = Settings.NAME)
 public class TgameCore implements IMod
 {
-    public static final String ID = "tgame-core";
-    public static final String VERSION = "@VERSION@";
-    public static final String NAME = "Tgame Core";
-    public static final String CHANNEL = "TGAME_CORE";
-
-    public static Logger LOGGER;
-
-    @Mod.Instance(TgameCore.ID)
+    @Mod.Instance(Settings.MODID)
     private static TgameCore instance;
 
     @SidedProxy(serverSide = "com.tgame.mods.core.CommonProxyBase", clientSide = "com.tgame.mods.core.ClientProxyBase")
@@ -36,8 +29,7 @@ public class TgameCore implements IMod
 
     public TgameCore()
     {
-        LOGGER = LogManager.getLogger(TgameCore.ID);
-        ThreadContext.put("side", FMLCommonHandler.instance().getSide().name().toLowerCase(Locale.ENGLISH));
+
     }
 
     @Override
