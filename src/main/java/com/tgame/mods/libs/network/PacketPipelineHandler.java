@@ -1,6 +1,6 @@
 package com.tgame.mods.libs.network;
 
-import com.tgame.mods.coremod.TgameCore;
+import com.tgame.mods.core.TgameCore;
 import com.tgame.mods.interfaces.IProxy;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.network.FMLEmbeddedChannel;

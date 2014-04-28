@@ -1,4 +1,4 @@
-package com.tgame.mods.coremod;
+package com.tgame.mods.core;
 
 import com.tgame.mods.interfaces.IMod;
 import cpw.mods.fml.common.FMLCommonHandler;
@@ -7,7 +7,6 @@ import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
-import cpw.mods.fml.common.registry.GameRegistry;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.ThreadContext;
@@ -32,7 +31,7 @@ public class TgameCore implements IMod
     @Mod.Instance(TgameCore.ID)
     private static TgameCore instance;
 
-    @SidedProxy(serverSide = "com.tgame.mods.coremod.CommonProxyBase", clientSide = "com.tgame.mods.coremod.ClientProxyBase")
+    @SidedProxy(serverSide = "com.tgame.mods.core.CommonProxyBase", clientSide = "com.tgame.mods.core.ClientProxyBase")
     public static CommonProxyBase proxy;
 
     public TgameCore()

@@ -1,6 +1,6 @@
 package com.tgame.mods.libs.registry;
 
-import com.tgame.mods.coremod.Settings;
+import com.tgame.mods.core.Settings;
 import cpw.mods.fml.client.registry.ClientRegistry;
 import net.minecraftforge.client.MinecraftForgeClient;
 import org.apache.logging.log4j.Level;

@@ -1,6 +1,6 @@
 package com.tgame.mods.libs.multiblocks.grid;
 
-import com.tgame.mods.coremod.TgameCore;
+import com.tgame.mods.core.TgameCore;
 import cpw.mods.fml.common.eventhandler.Event;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent;

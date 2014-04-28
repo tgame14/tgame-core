@@ -1,6 +1,5 @@
-package com.tgame.mods.coremod.prefabs.items;
+package com.tgame.mods.libs.prefabs.items;
 
-import com.tgame.mods.coremod.Settings;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.ItemArmor;
 

@@ -1,4 +1,4 @@
-package com.tgame.mods.coremod;
+package com.tgame.mods.core;
 
 /**
  * @since 11/03/14

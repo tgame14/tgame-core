@@ -1,4 +1,4 @@
-package com.tgame.mods.coremod.asm;
+package com.tgame.mods.core.asm;
 
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.Label;
