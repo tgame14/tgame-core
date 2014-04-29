@@ -1,6 +1,9 @@
 package com.tgame.mods.interfaces;
 
 /**
+ * an interface used to apply on Compatibility proxies
+ * the compatibility proxy system is a loading code bits section
+ *
  * @since 12/03/14
  * @author tgame14
  */
