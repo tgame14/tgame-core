@@ -1,5 +1,6 @@
 package com.tgame.mods.libs.registry;
 
+import com.tgame.mods.core.Settings;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
@@ -39,6 +40,8 @@ class ItemDefinition implements IItemDefinition
         {
             Registry.ItemData data = this.item.getClass().getAnnotation(Registry.ItemData.class);
             this.itemRenderClass = data.itemRenderer();
+
+            Settings.LOGGER.warn("IItemRender class: " + this.itemRenderClass);
         }
     }
 

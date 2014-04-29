@@ -1,5 +1,6 @@
 package com.tgame.mods.libs.network;
 
+import com.tgame.mods.core.Settings;
 import com.tgame.mods.core.TgameCore;
 import com.tgame.mods.interfaces.IProxy;
 import cpw.mods.fml.common.FMLCommonHandler;
@@ -46,18 +47,18 @@ public class PacketPipelineHandler extends MessageToMessageCodec<FMLProxyPacket,
     {
         if (this.packets.size() > 256)
         {
-            TgameCore.LOGGER.error("Reached Max limit of packets for AT, Report to @AUTHOR@!");
+            Settings.LOGGER.error("Reached Max limit of packets for AT, Report to @AUTHOR@!");
             return false;
         }
         if (this.packets.contains(clazz))
         {
-            TgameCore.LOGGER.warn("Packet class is attempted to be registered twice. this is a programming mistake");
+            Settings.LOGGER.warn("Packet class is attempted to be registered twice. this is a programming mistake");
             return false;
         }
 
         if (!this.postInitialized)
         {
-            TgameCore.LOGGER.error("Error, Mod is not post initialized yet");
+            Settings.LOGGER.error("Error, Mod is not post initialized yet");
             return false;
         }
 
@@ -146,7 +147,7 @@ public class PacketPipelineHandler extends MessageToMessageCodec<FMLProxyPacket,
     @Override
     public void init ()
     {
-        this.channelEnumMap = NetworkRegistry.INSTANCE.newChannel(TgameCore.CHANNEL, this);
+        this.channelEnumMap = NetworkRegistry.INSTANCE.newChannel(Settings.CHANNEL, this);
     }
 
     /**
@@ -176,7 +177,7 @@ public class PacketPipelineHandler extends MessageToMessageCodec<FMLProxyPacket,
     @Override
     public String getModId ()
     {
-        return TgameCore.ID;
+        return Settings.MODID;
     }
 
     /// *** THIS IS SPECIAL PACKET SENDING METHODS SIMILAR TO 1.6.4 IMPLEMENTATIONS *** ///

@@ -15,23 +15,23 @@ public class ClientRegistryProxy extends CommonRegistryProxy
     public void registerItem (IItemDefinition itemDefinition)
     {
         super.registerItem(itemDefinition);
-        if (itemDefinition.getItem().getClass().getAnnotation(Registry.ItemData.class) != null)
+        try
         {
-            try
-            {
+            Settings.LOGGER.info("An IItemRenderClass " + itemDefinition.getIItemRendererClass());
+            if (itemDefinition.getIItemRendererClass() != null)
                 MinecraftForgeClient.registerItemRenderer(itemDefinition.getItem(), itemDefinition.getIItemRendererClass().newInstance());
-            }
-            catch (InstantiationException e)
-            {
-                Settings.LOGGER.catching(Level.FATAL, e);
-                e.printStackTrace();
-            }
-            catch (IllegalAccessException e)
-            {
-                Settings.LOGGER.catching(Level.FATAL, e);
-                e.printStackTrace();
-            }
         }
+        catch (InstantiationException e)
+        {
+            Settings.LOGGER.catching(Level.FATAL, e);
+            e.printStackTrace();
+        }
+        catch (IllegalAccessException e)
+        {
+            Settings.LOGGER.catching(Level.FATAL, e);
+            e.printStackTrace();
+        }
+
     }
 
     @Override

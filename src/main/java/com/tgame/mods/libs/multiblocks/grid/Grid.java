@@ -1,5 +1,6 @@
 package com.tgame.mods.libs.multiblocks.grid;
 
+import com.tgame.mods.core.Settings;
 import com.tgame.mods.core.TgameCore;
 import cpw.mods.fml.common.eventhandler.Event;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
@@ -44,7 +45,7 @@ public class Grid implements IGrid
                 }
                 catch (Exception e)
                 {
-                    TgameCore.LOGGER.fatal("An IGridTicker doesn't have a Constructor with IGrid in it! This is an error", e);
+                    Settings.LOGGER.fatal("An IGridTicker doesn't have a Constructor with IGrid in it! This is an error", e);
                 }
             }
         }

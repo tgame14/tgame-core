@@ -1,5 +1,6 @@
 package com.tgame.mods.libs.prefabs.items;
 
+import com.tgame.mods.core.Settings;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 
@@ -9,12 +10,16 @@ import net.minecraft.item.Item;
  */
 public abstract class ItemBase extends Item
 {
-    public ItemBase(CreativeTabs tab, String resource)
+    public ItemBase (CreativeTabs tab, String resource, boolean singleTexture)
     {
         super();
         this.setCreativeTab(tab);
         this.setUnlocalizedName(this.getClass().getSimpleName());
-        this.setTextureName(this.getUnlocalizedName());
+
+        if (singleTexture)
+        {
+            this.setTextureName(resource + this.getClass().getSimpleName());
+        }
 
     }
 }

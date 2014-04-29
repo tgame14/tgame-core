@@ -32,6 +32,14 @@ public class NBTUtility
         }
     }
 
+    public static void addNBTBooleanKey(NBTTagCompound nbt, String key, boolean value)
+    {
+        if (!nbt.hasKey(key))
+        {
+            nbt.setBoolean(key, value);
+        }
+    }
+
     public static void addNBTStringKey(NBTTagCompound nbt, String key, String value)
     {
         if (!nbt.hasKey(key))
