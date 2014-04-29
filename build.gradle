@@ -40,7 +40,7 @@ else
 
 
 // define the properties file
-def ext.configFile = file "build.properties"
+ext.configFile = file "build.properties"
 
 configFile.withReader {
     // read config.  it shall from now on be referenced as simply config or as project.config
