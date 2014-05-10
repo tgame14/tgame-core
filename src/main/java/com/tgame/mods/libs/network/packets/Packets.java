@@ -1,6 +1,7 @@
 package com.tgame.mods.libs.network.packets;
 
 import com.tgame.mods.libs.network.PacketPipelineHandler;
+import com.tgame.mods.libs.network.npackets.PacketTile;
 
 /**
  * @since 12/03/14
@@ -10,7 +11,7 @@ public class Packets
 {
     public static void init(PacketPipelineHandler handler)
     {
-        // handler.registerPacket(aPacket.class)
+        handler.registerPacket(PacketTile.class);
     }
 
 }
