@@ -43,11 +43,11 @@ public class PacketPipeline extends MessageToMessageCodec<FMLProxyPacket, Packet
 
     public enum PacketTypes
     {
+        PACKET_TILE();
 
         private PacketTypes()
         {
 
-            Item.getItemF
         }
     }
 
@@ -97,7 +97,7 @@ public class PacketPipeline extends MessageToMessageCodec<FMLProxyPacket, Packet
 
         int packetId = this.packets.indexOf(clazz);
         buffer.writeByte(packetId);
-        msg.encodeInto(ctx, buffer);
+        //msg.encodeInto(ctx, buffer);
         FMLProxyPacket proxyPacket = new FMLProxyPacket(buffer.copy(), ctx.channel().attr(NetworkRegistry.FML_CHANNEL).get());
         out.add(proxyPacket);
 
@@ -122,20 +122,20 @@ public class PacketPipeline extends MessageToMessageCodec<FMLProxyPacket, Packet
             throw new Exception("No packets Registered for packet ID: " + packetId);
 
         PacketType packet = clazz.newInstance();
-        packet.decodeInto(ctx, payload.slice());
+        //packet.decodeInto(ctx, payload.slice());
 
         EntityPlayer entityPlayer;
         switch (FMLCommonHandler.instance().getEffectiveSide())
         {
         case CLIENT:
             entityPlayer = Minecraft.getMinecraft().thePlayer;
-            packet.handleClientSide(entityPlayer);
+            //packet.handleClientSide(entityPlayer);
             break;
 
         case SERVER:
             INetHandler netHandler = ctx.channel().attr(NetworkRegistry.NET_HANDLER).get();
             entityPlayer = ((NetHandlerPlayServer) netHandler).playerEntity;
-            packet.handleServerSide(entityPlayer);
+            //packet.handleServerSide(entityPlayer);
             break;
         default:
             break;
