@@ -1,6 +1,7 @@
 package com.tgame.mods.core;
 
 import com.tgame.mods.config.Config;
+import com.tgame.mods.config.ConfigHandler;
 import com.tgame.mods.config.ConfigScanner;
 import com.tgame.mods.interfaces.IMod;
 import cpw.mods.fml.common.Mod;
@@ -8,6 +9,7 @@ import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.common.config.Configuration;
 
 /**
  * @since 10/03/14
@@ -36,6 +38,7 @@ public class TgameCore implements IMod
     public void preInit(FMLPreInitializationEvent event)
     {
         ConfigScanner.instance().generateSets(event.getAsmData());
+        Settings.CONFIGURATION = new Configuration(event.getSuggestedConfigurationFile());
     }
 
     @Override
@@ -49,7 +52,7 @@ public class TgameCore implements IMod
     @Mod.EventHandler
     public void postInit(FMLPostInitializationEvent event)
     {
-
+        ConfigHandler.configure(Settings.CONFIGURATION, Settings.DOMAIN);
     }
 
 

@@ -28,7 +28,6 @@ public class ConfigHandler
             }
         }
         config.save();
-
     }
 
     private static void handleField(Field field, Config cfg, Configuration config)
