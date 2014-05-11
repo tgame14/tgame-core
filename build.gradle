@@ -16,29 +16,6 @@ buildscript {
 }
 
 
-def ENV = System.getenv()
-
-def buildNum
-
-if(ENV.DRONE_BUILD_NUMBER)
-    buildNum = ENV.DRONE_BUILD_NUMBER + " - drone"
-
-// Jenkins Support
-else if (ENV.BUILD_NUMBER)
-    buildNum = ENV.BUILD_NUMBER + " - jenkins"
-
-// Travis Support
-else if (ENV.TRAVIS_BUILD_NUMBER)
-    buildNum = ENV.TRAVIS_BUILD_NUMBER + " - travis"
-
-// Codeship.io Support
-else if (ENV.CI_BUILD_NUMBER)
-    buildNum = ENV.CI_BUILD_NUMBER + " - codeship"
-
-else
-    buildNum = "err - manual"
-
-
 // define the properties file
 ext.configFile = file "build.properties"
 
@@ -50,35 +27,96 @@ configFile.withReader {
 }
 
 
-apply plugin: 'java'
-apply plugin: 'scala'
 apply plugin: 'forge'
+apply plugin: 'maven-publish'
 
-version = config.mod_version + buildNum
-group= "com.tgame" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
-archivesBaseName = "tgamecore"
+version = config.mod_version
+group= "com.tgame.mods" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
+archivesBaseName = "tgame-core"
+
+version += "${System.getenv().BUILD_NUMBER}"
 
 minecraft {
-    version = config.minecraft_version + "-" + config.forge_version
+    version = "${config.minecraft_version}-${config.forge_version}"
     assetDir = "eclipse/assets"
+    replace "@AUTHOR@", config.author_name
+    replace "@VERSION@", project.version
 }
 
-processResources
-{
-    // this will ensure that this task is redone when the versions change.
-    inputs.property "version", project.version
-    inputs.property "mcversion", project.minecraft.version
+task createChangelog(type: Copy) {
+    println "Called createChangelog"
+    """git --no-pager log --pretty=format:"%cn : %s" > changelog.txt""".execute()
+    println "executed git command"
+    println 'changelog.txt'
+    from "changelog.txt"
+    into 'output'
+}
 
-    // replace stuff in mcmod.info, nothing else
-    from(sourceSets.main.resources.srcDirs) {
-        include 'mcmod.info'
-                
-        // replace version and mcversion
-        expand 'version':project.version, 'mcversion':project.minecraft.version
+task copyProperties(type: Copy) {
+    from 'build.properties'
+    into 'output'
+}
+
+jar {
+    dependsOn copyProperties
+    classifier = 'universal'
+
+    destinationDir = file 'output'
+}
+
+task deobfJar(type: Jar) {
+    from sourceSets.main.output
+    classifier 'deobf'
+
+    destinationDir = file 'output'
+}
+
+
+publishing {
+    publications {
+        publish.dependsOn 'createChangelog'
+        publish.dependsOn 'build'
+
+        mavenJava(MavenPublication) {
+
+            groupId project.group
+            artifactId project.archivesBaseName
+            version project.version
+
+            artifact jar
+            artifact deobfJar
+
+            artifact {
+                classifier = "output/properties"
+                file 'output/build.properties'
+            }
+        }
     }
-        
-    // copy everything else, thats not the mcmod.info
-    from(sourceSets.main.resources.srcDirs) {
-        exclude 'mcmod.info'
+    repositories {
+        maven {
+            url "file://var/www/maven"
+        }
     }
+}
+
+
+
+//processResources
+//{
+//    // this will ensure that this task is redone when the versions change.
+//    inputs.property "version", project.version
+//    inputs.property "mcversion", project.minecraft.version
+//
+//    // replace stuff in mcmod.info, nothing else
+//    from(sourceSets.main.resources.srcDirs) {
+//        include 'mcmod.info'
+//
+//        // replace version and mcversion
+//        expand 'version':project.version, 'mcversion':project.minecraft.version
+//    }
+//
+//    // copy everything else, thats not the mcmod.info
+//    from(sourceSets.main.resources.srcDirs) {
+//        exclude 'mcmod.info'
+//    }
 }
