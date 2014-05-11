@@ -11,7 +11,7 @@ public class Packets
 {
     public static void init(PacketPipelineHandler handler)
     {
-        handler.registerPacket(PacketTile.class);
+
     }
 
 }

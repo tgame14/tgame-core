@@ -1,7 +1,9 @@
 package com.tgame.mods.libs.network.npackets;
 
+import cpw.mods.fml.relauncher.Side;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
+import net.minecraft.entity.player.EntityPlayer;
 
 /**
  * implement on Tiles to receive packets
@@ -11,5 +13,5 @@ import io.netty.channel.ChannelHandlerContext;
  */
 public interface IPacketReceiverWithID
 {
-    void onReceivePacketId (ChannelHandlerContext ctx, ByteBuf buffer);
+    void onReceivePacketId (int id, EntityPlayer player, ByteBuf buffer, Side side);
 }

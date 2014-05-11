@@ -1,12 +1,9 @@
 package com.tgame.mods.libs.network.npackets;
 
-import com.jcraft.jogg.Packet;
 import com.tgame.mods.core.Settings;
 import com.tgame.mods.interfaces.IProxy;
-import com.tgame.mods.libs.network.AbstractPacket;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.network.FMLEmbeddedChannel;
-import cpw.mods.fml.common.network.FMLIndexedMessageToMessageCodec;
 import cpw.mods.fml.common.network.FMLOutboundHandler;
 import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.network.internal.FMLProxyPacket;
@@ -16,7 +13,6 @@ import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.MessageToMessageCodec;
-import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -32,51 +28,39 @@ import java.util.*;
 public class PacketPipeline extends MessageToMessageCodec<FMLProxyPacket, PacketType> implements IProxy
 {
     private EnumMap<Side, FMLEmbeddedChannel> channelEnumMap;
-    private List<Class<? extends PacketType>> packets;
-    private boolean postInitialized;
-
-    public PacketPipeline ()
-    {
-        this.packets = new LinkedList<Class<? extends PacketType>>();
-        this.postInitialized = false;
-    }
 
     public enum PacketTypes
     {
-        PACKET_TILE();
+        PACKET_TILE(PacketTile.class);
 
-        private PacketTypes()
+
+        public final Class<? extends PacketType> clazz;
+
+        private PacketTypes (Class<? extends PacketType> clazz)
         {
+            this.clazz = clazz;
+        }
 
+        public Class<? extends PacketType> getClassOfPacket ()
+        {
+            return clazz;
+        }
+
+        public static PacketTypes getTypeForClass(Class<? extends PacketType> c)
+        {
+            for (PacketTypes type : values())
+            {
+                if (type.clazz.equals(c))
+                {
+                    return type;
+                }
+            }
+            return null;
         }
     }
 
-    /**
-     *
-     * @param clazz the class of the packet to add to the packets list
-     * @return whether it was successfully registered or not.
-     */
-    public boolean registerPacket (Class<? extends PacketType> clazz)
+    public PacketPipeline ()
     {
-        if (this.packets.size() > 256)
-        {
-            Settings.LOGGER.error("Reached Max limit of packets for AT, Report to @AUTHOR@!");
-            return false;
-        }
-        if (this.packets.contains(clazz))
-        {
-            Settings.LOGGER.warn("Packet class is attempted to be registered twice. this is a programming mistake");
-            return false;
-        }
-
-        if (!this.postInitialized)
-        {
-            Settings.LOGGER.error("Error, Mod is not post initialized yet");
-            return false;
-        }
-
-        this.packets.add(clazz);
-        return true;
     }
 
     /**
@@ -92,16 +76,44 @@ public class PacketPipeline extends MessageToMessageCodec<FMLProxyPacket, Packet
     {
         ByteBuf buffer = Unpooled.buffer();
         Class<? extends PacketType> clazz = msg.getClass();
-        if (!this.packets.contains(msg.getClass()))
+        if (PacketTypes.getTypeForClass(clazz) == null)
             throw new Exception("No packets registered for " + msg.getClass().getSimpleName());
 
-        int packetId = this.packets.indexOf(clazz);
+        int packetId = PacketTypes.getTypeForClass(clazz).ordinal();
         buffer.writeByte(packetId);
-        //msg.encodeInto(ctx, buffer);
+        msg.encodeInto(ctx, buffer);
         FMLProxyPacket proxyPacket = new FMLProxyPacket(buffer.copy(), ctx.channel().attr(NetworkRegistry.FML_CHANNEL).get());
         out.add(proxyPacket);
 
     }
+
+    //    /**
+    //     *
+    //     * @param clazz the class of the packet to add to the packets list
+    //     * @return whether it was successfully registered or not.
+    //     */
+    //    public boolean registerPacket (Class<? extends PacketType> clazz)
+    //    {
+    //        if (this.packets.size() > 256)
+    //        {
+    //            Settings.LOGGER.error("Reached Max limit of packets for AT, Report to @AUTHOR@!");
+    //            return false;
+    //        }
+    //        if (this.packets.contains(clazz))
+    //        {
+    //            Settings.LOGGER.warn("Packet class is attempted to be registered twice. this is a programming mistake");
+    //            return false;
+    //        }
+    //
+    //        if (!this.postInitialized)
+    //        {
+    //            Settings.LOGGER.error("Error, Mod is not post initialized yet");
+    //            return false;
+    //        }
+    //
+    //        this.packets.add(clazz);
+    //        return true;
+    //    }
 
     /**
      * Decodes the packet and handles it within the packet itself and its handling
@@ -116,26 +128,26 @@ public class PacketPipeline extends MessageToMessageCodec<FMLProxyPacket, Packet
     {
         ByteBuf payload = msg.payload();
         int packetId = payload.readByte();
-        Class<? extends PacketType> clazz = this.packets.get(packetId);
+        Class<? extends PacketType> clazz = PacketTypes.values()[packetId].getClassOfPacket();
 
         if (clazz == null)
             throw new Exception("No packets Registered for packet ID: " + packetId);
 
         PacketType packet = clazz.newInstance();
-        //packet.decodeInto(ctx, payload.slice());
+        packet.decodeInto(ctx, payload.slice());
 
         EntityPlayer entityPlayer;
         switch (FMLCommonHandler.instance().getEffectiveSide())
         {
         case CLIENT:
             entityPlayer = Minecraft.getMinecraft().thePlayer;
-            //packet.handleClientSide(entityPlayer);
+            packet.handleClientSide(entityPlayer);
             break;
 
         case SERVER:
             INetHandler netHandler = ctx.channel().attr(NetworkRegistry.NET_HANDLER).get();
             entityPlayer = ((NetHandlerPlayServer) netHandler).playerEntity;
-            //packet.handleServerSide(entityPlayer);
+            packet.handleServerSide(entityPlayer);
             break;
         default:
             break;
@@ -169,22 +181,22 @@ public class PacketPipeline extends MessageToMessageCodec<FMLProxyPacket, Packet
     @Override
     public void postInit ()
     {
-        if (this.postInitialized)
-            return;
-
-        this.postInitialized = true;
-        Collections.sort(this.packets, new Comparator<Class<? extends PacketType>>()
-        {
-            @Override
-            public int compare (Class<? extends PacketType> o1, Class<? extends PacketType> o2)
-            {
-                int com = String.CASE_INSENSITIVE_ORDER.compare(o1.getCanonicalName(), o2.getCanonicalName());
-                if (com == 0)
-                    com = o1.getCanonicalName().compareTo(o2.getCanonicalName());
-
-                return com;
-            }
-        });
+//        if (this.postInitialized)
+//            return;
+//
+//        this.postInitialized = true;
+//        Collections.sort(this.packets, new Comparator<Class<? extends PacketType>>()
+//        {
+//            @Override
+//            public int compare (Class<? extends PacketType> o1, Class<? extends PacketType> o2)
+//            {
+//                int com = String.CASE_INSENSITIVE_ORDER.compare(o1.getCanonicalName(), o2.getCanonicalName());
+//                if (com == 0)
+//                    com = o1.getCanonicalName().compareTo(o2.getCanonicalName());
+//
+//                return com;
+//            }
+//        });
     }
 
     @Override
@@ -192,8 +204,6 @@ public class PacketPipeline extends MessageToMessageCodec<FMLProxyPacket, Packet
     {
         return Settings.MODID;
     }
-
-    /// *** THIS IS SPECIAL PACKET SENDING METHODS SIMILAR TO 1.6.4 IMPLEMENTATIONS *** ///
 
     /**
      * @param packet the packet to send to the player
@@ -204,6 +214,15 @@ public class PacketPipeline extends MessageToMessageCodec<FMLProxyPacket, Packet
     {
         this.channelEnumMap.get(Side.SERVER).attr(FMLOutboundHandler.FML_MESSAGETARGET).set(FMLOutboundHandler.OutboundTarget.PLAYER);
         this.channelEnumMap.get(Side.SERVER).attr(FMLOutboundHandler.FML_MESSAGETARGETARGS).set(player);
+        this.channelEnumMap.get(Side.SERVER).writeAndFlush(packet);
+    }
+
+    /// *** THIS IS SPECIAL PACKET SENDING METHODS SIMILAR TO 1.6.4 IMPLEMENTATIONS *** ///
+
+    public void sendPacketToTile(PacketTile packet, int dimId)
+    {
+        this.channelEnumMap.get(Side.SERVER).attr(FMLOutboundHandler.FML_MESSAGETARGET).set(FMLOutboundHandler.OutboundTarget.DIMENSION);
+        this.channelEnumMap.get(Side.SERVER).attr(FMLOutboundHandler.FML_MESSAGETARGETARGS).set(dimId);
         this.channelEnumMap.get(Side.SERVER).writeAndFlush(packet);
     }
 
