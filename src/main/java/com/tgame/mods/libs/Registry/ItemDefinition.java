@@ -4,7 +4,6 @@ import com.tgame.mods.core.Settings;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
-import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.client.IItemRenderer;
 
@@ -21,25 +20,24 @@ class ItemDefinition implements IItemDefinition
     protected Item item;
     protected Class<? extends IItemRenderer> itemRenderClass;
 
-    public ItemDefinition (Block block)
+    public ItemDefinition (Block block, Class<? extends Block> clazz)
     {
         this.block = block;
-        if (this.block.getClass().getAnnotation(Registry.BlockData.class) != null)
+        if (clazz.getAnnotation(BlockData.class) != null)
         {
-            Registry.BlockData data = this.block.getClass().getAnnotation(Registry.BlockData.class);
+            BlockData data = clazz.getAnnotation(BlockData.class);
             this.tileClass = data.tileClass();
-            this.itemBlockClass = data.itemBlock();
-
+            this.itemBlockClass = data.itemBlockClass();
         }
     }
 
-    public ItemDefinition (Item item)
+    public ItemDefinition (Item item, Class<? extends Item> clazz)
     {
         this.item = item;
-        if (this.item.getClass().getAnnotation(Registry.ItemData.class) != null)
+        if (clazz.getAnnotation(ItemData.class) != null)
         {
-            Registry.ItemData data = this.item.getClass().getAnnotation(Registry.ItemData.class);
-            this.itemRenderClass = data.itemRenderer();
+            ItemData data = clazz.getAnnotation(ItemData.class);
+            this.itemRenderClass = data.itemRendererClass();
 
             Settings.LOGGER.warn("IItemRender class: " + this.itemRenderClass);
         }
@@ -75,10 +73,4 @@ class ItemDefinition implements IItemDefinition
         return tileClass;
     }
 
-    @Override
-    public boolean sameAs (ItemStack comparableItem)
-    {
-        //TODO: Implement
-        return false;
-    }
 }

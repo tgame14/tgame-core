@@ -44,7 +44,7 @@ public class ClientRegistryProxy extends CommonRegistryProxy
     public void registerTile (IItemDefinition itemDefinition)
     {
         super.registerTile(itemDefinition);
-        Registry.TileData data = itemDefinition.getTile().getAnnotation(Registry.TileData.class);
+        TileData data = itemDefinition.getTile().getAnnotation(TileData.class);
         if (data != null)
         {
             try

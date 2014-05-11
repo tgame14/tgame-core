@@ -38,13 +38,4 @@ public interface IItemDefinition
      */
     Class<? extends TileEntity> getTile ();
 
-    /**
-     * Compare {@link net.minecraft.item.ItemStack} with this {@link IItemDefinition}
-     *
-     * @param comparableItem
-     * @return true if the item stack is a matching item.
-     */
-    boolean sameAs (ItemStack comparableItem);
-
-
 }
