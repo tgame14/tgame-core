@@ -3,10 +3,17 @@ package com.tgame.mods.libs.registry;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.tileentity.TileEntity;
 
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
+
 /**
  * @since 11/05/14
  * @author tgame14
  */
+@Retention(RetentionPolicy.RUNTIME)
+@Target(ElementType.TYPE)
 public @interface BlockData
 {
     public Class<? extends TileEntity> tileClass ();

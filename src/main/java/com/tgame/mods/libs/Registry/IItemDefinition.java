@@ -38,4 +38,6 @@ public interface IItemDefinition
      */
     Class<? extends TileEntity> getTile ();
 
+    ItemStack getItemStack(int amount, int meta);
+
 }

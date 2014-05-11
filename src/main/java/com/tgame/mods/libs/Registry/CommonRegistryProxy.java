@@ -15,7 +15,8 @@ public class CommonRegistryProxy
 
     public void registerBlock(IItemDefinition itemDefinition)
     {
-        GameRegistry.registerBlock(itemDefinition.getBlock(), itemDefinition.getBlock().getUnlocalizedName().replaceAll("tile.", "").replaceAll(".name", ""));
+
+        GameRegistry.registerBlock(itemDefinition.getBlock(), itemDefinition.getItemBlockClass(), itemDefinition.getBlock().getUnlocalizedName().replaceAll("tile.", "").replaceAll(".name", ""));
         if (itemDefinition.getTile() != null)
         {
             this.registerTile(itemDefinition);
