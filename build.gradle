@@ -27,6 +27,7 @@ configFile.withReader {
 
 
 apply plugin: 'forge'
+apply plugin: 'curseforge'
 apply plugin: 'maven-publish'
 
 version = config.mod_version
@@ -45,13 +46,10 @@ minecraft {
     replace "@VERSION@", project.version
 }
 
-task createChangelog(type: Copy) {
-    println "Called createChangelog"
-    """git --no-pager log --pretty=format:"%cn : %s" > changelog.txt""".execute()
-    println "executed git command"
-    println 'changelog.txt'
-    from "changelog.txt"
-    into 'output'
+curse {
+    apiKey = System.getenv().CURSE_API_KEY
+    projectId = "220454"
+    releaseType = System.getenv().RELEASE_CHANNEL
 }
 
 task copyProperties(type: Copy) {
@@ -67,6 +65,7 @@ jar {
 }
 
 task deobfJar(type: Jar) {
+    printf "${CHANGES, showPaths=true}"
     from sourceSets.main.output
     classifier 'deobf'
 
@@ -76,7 +75,6 @@ task deobfJar(type: Jar) {
 
 publishing {
     publications {
-        publish.dependsOn 'createChangelog'
         publish.dependsOn 'build'
 
         mavenJava(MavenPublication) {
