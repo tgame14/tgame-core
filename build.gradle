@@ -76,7 +76,7 @@ task deobfJar(type: Jar) {
 publishing {
     publications {
         publish.dependsOn 'build'
-        publiah.dependsOn 'curse'
+        publish.dependsOn 'curse'
 
         mavenJava(MavenPublication) {
 
