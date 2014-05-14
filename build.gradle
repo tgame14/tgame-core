@@ -65,7 +65,6 @@ jar {
 }
 
 task deobfJar(type: Jar) {
-    printf "${CHANGES, showPaths=true}"
     from sourceSets.main.output
     classifier 'deobf'
 
