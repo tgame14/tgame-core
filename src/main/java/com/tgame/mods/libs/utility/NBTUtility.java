@@ -1,5 +1,6 @@
 package com.tgame.mods.libs.utility;
 
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
 /**
@@ -54,5 +55,16 @@ public class NBTUtility
         {
             nbt.setTag(key, value);
         }
+    }
+
+    public static NBTTagCompound getOrCreateNBTTag(ItemStack itemstack)
+    {
+        if (itemstack.hasTagCompound())
+        {
+            return itemstack.getTagCompound();
+        }
+        NBTTagCompound tag = new NBTTagCompound();
+        itemstack.setTagCompound(tag);
+        return tag;
     }
 }
