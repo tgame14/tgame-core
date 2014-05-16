@@ -72,12 +72,14 @@ task deobfJar(type: Jar) {
     destinationDir = file 'output'
 }
 
+task release () {
+    dependsOn 'build'
+    dependsOn 'curse'
+}
 
 publishing {
     publications {
         publish.dependsOn 'build'
-        if (System.getenv().JOB_NAME.contains("Release"))
-            publish.dependsOn 'curse'
 
         mavenJava(MavenPublication) {
 
