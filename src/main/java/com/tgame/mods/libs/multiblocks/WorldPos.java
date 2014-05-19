@@ -8,11 +8,11 @@ import net.minecraft.world.World;
  */
 public class WorldPos implements Comparable<WorldPos>, Cloneable
 {
-    private int x;
-    private int y;
-    private int z;
+    protected int x;
+    protected int y;
+    protected int z;
 
-    private World world;
+    protected World world;
 
     public WorldPos(World world, int x, int y, int z)
     {
@@ -146,4 +146,9 @@ public class WorldPos implements Comparable<WorldPos>, Cloneable
         return result;
     }
 
+    @Override
+    protected Object clone () throws CloneNotSupportedException
+    {
+        return new WorldPos(this.world, this.x, this.y, this.z);
+    }
 }

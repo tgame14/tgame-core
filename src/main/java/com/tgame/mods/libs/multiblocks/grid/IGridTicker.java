@@ -8,6 +8,7 @@ import io.netty.buffer.ByteBuf;
  * @since 10/03/14
  * @author tgame14
  */
+@Deprecated
 public interface IGridTicker
 {
     /** the update Grid is Called before all Tiles tick */

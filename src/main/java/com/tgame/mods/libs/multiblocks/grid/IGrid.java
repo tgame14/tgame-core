@@ -8,6 +8,7 @@ import net.minecraft.nbt.NBTTagCompound;
  * @since 11/03/14
  * @author tgame14
  */
+@Deprecated
 public interface IGrid
 {
     public static final String NBT_SAVE_KEY = "gridDataStorage";

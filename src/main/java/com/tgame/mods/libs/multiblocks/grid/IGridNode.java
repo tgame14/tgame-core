@@ -9,6 +9,7 @@ import net.minecraft.nbt.NBTTagCompound;
  * @since 10/03/14
  * @author tgame14
  */
+@Deprecated
 public interface IGridNode
 {
     public WorldPos getWorldPos();

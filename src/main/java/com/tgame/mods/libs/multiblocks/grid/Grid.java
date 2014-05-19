@@ -18,6 +18,7 @@ import java.util.Set;
  * @since 10/03/14
  * @author tgame14
  */
+@Deprecated
 public class Grid implements IGrid
 {
 
