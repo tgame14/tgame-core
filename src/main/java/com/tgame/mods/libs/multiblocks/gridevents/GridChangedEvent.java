@@ -1,7 +1,7 @@
 package com.tgame.mods.libs.multiblocks.gridevents;
 
+import com.tgame.mods.libs.multiblocks.grid.AbstractMultiblockNode;
 import com.tgame.mods.libs.multiblocks.grid.GridController;
-import com.tgame.mods.libs.multiblocks.grid.TileMultiblockNode;
 import cpw.mods.fml.common.eventhandler.Event;
 
 /**
@@ -19,9 +19,9 @@ public class GridChangedEvent extends Event
 
     public class NodeAddedEvent extends GridChangedEvent
     {
-        public final TileMultiblockNode node;
+        public final AbstractMultiblockNode node;
 
-        public NodeAddedEvent (GridController grid, TileMultiblockNode node)
+        public NodeAddedEvent (GridController grid, AbstractMultiblockNode node)
         {
             super(grid);
             this.node = node;
@@ -30,9 +30,9 @@ public class GridChangedEvent extends Event
 
     public class NodeRemovedEvent extends GridChangedEvent
     {
-        public final TileMultiblockNode node;
+        public final AbstractMultiblockNode node;
 
-        public NodeRemovedEvent (GridController grid, TileMultiblockNode node)
+        public NodeRemovedEvent (GridController grid, AbstractMultiblockNode node)
         {
             super(grid);
             this.node = node;

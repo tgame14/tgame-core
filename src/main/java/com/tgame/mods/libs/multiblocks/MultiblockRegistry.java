@@ -1,8 +1,8 @@
 package com.tgame.mods.libs.multiblocks;
 
 import com.tgame.mods.core.Settings;
+import com.tgame.mods.libs.multiblocks.grid.AbstractMultiblockNode;
 import com.tgame.mods.libs.multiblocks.grid.GridController;
-import com.tgame.mods.libs.multiblocks.grid.TileMultiblockNode;
 import net.minecraft.world.World;
 
 import java.util.HashMap;
@@ -51,13 +51,13 @@ public class MultiblockRegistry
         }
     }
 
-    public void onPartAdded (World world, TileMultiblockNode part)
+    public void onPartAdded (World world, AbstractMultiblockNode part)
     {
         MultiblockWorldRegistry registry = getOrCreateRegistry(world);
         registry.onPartAdded(part);
     }
 
-    public void onPartRemovedFromWorld (World world, TileMultiblockNode part)
+    public void onPartRemovedFromWorld (World world, AbstractMultiblockNode part)
     {
         if (registries.containsKey(world))
         {

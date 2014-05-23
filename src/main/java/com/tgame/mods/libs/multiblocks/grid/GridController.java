@@ -1,6 +1,7 @@
 package com.tgame.mods.libs.multiblocks.grid;
 
 import com.tgame.mods.core.Settings;
+import com.tgame.mods.interfaces.IDataObject;
 import com.tgame.mods.libs.multiblocks.MultiblockRegistry;
 import com.tgame.mods.libs.multiblocks.MultiblockValidationException;
 import com.tgame.mods.libs.multiblocks.WorldPos;
@@ -15,11 +16,16 @@ import java.util.LinkedList;
 import java.util.Set;
 
 /**
+ * Extend this class to have a new controller, the rest is already handled Intenally
+ * Do remember, all overriden methods are { @code CALLBACKS! }
+ *
+ * Limiting attachement / detachment behaviour should be done by descriptors of the multiblock and their given methods for it.
+ *
  * @since 23/05/14
  * @author Erogenous Beef
  * @author tgame14
  */
-public abstract class GridController
+public abstract class GridController implements IDataObject
 {
     public static final short DIMENSION_UNBOUNDED = -1;
 
@@ -27,7 +33,7 @@ public abstract class GridController
     public final World worldObj;
     protected AssemblyState assemblyState;
 
-    protected HashSet<TileMultiblockNode> connectedParts;
+    protected HashSet<AbstractMultiblockNode> connectedParts;
     protected boolean debugMode;
     /** This is a deterministically-picked coordinate that identifies this
      * multiblock uniquely in its dimension.
@@ -63,7 +69,7 @@ public abstract class GridController
     {
         // Multiblock stuff
         worldObj = world;
-        connectedParts = new HashSet<TileMultiblockNode>();
+        connectedParts = new HashSet<AbstractMultiblockNode>();
 
         referenceCoord = null;
         assemblyState = AssemblyState.Disassembled;
@@ -92,7 +98,7 @@ public abstract class GridController
      * The part will be notified that the data has been used after this call completes.
      * @param part The NBT tag containing this controller's data.
      */
-    public abstract void onAttachedPartWithMultiblockData (TileMultiblockNode part, NBTTagCompound data);
+    public abstract void onAttachedPartWithMultiblockData (AbstractMultiblockNode part, NBTTagCompound data);
 
     /**
      * Check if a block is being tracked by this machine.
@@ -108,9 +114,9 @@ public abstract class GridController
      * Attach a new part to this machine.
      * @param part The part to add.
      */
-    public void attachBlock (TileMultiblockNode part)
+    public void attachBlock (AbstractMultiblockNode part)
     {
-        TileMultiblockNode candidate;
+        AbstractMultiblockNode candidate;
         WorldPos coord = part.getWorldLocation();
 
         if (!connectedParts.add(part))
@@ -136,7 +142,7 @@ public abstract class GridController
         else if (coord.compareTo(referenceCoord) < 0)
         {
             TileEntity te = this.worldObj.getTileEntity(referenceCoord.x(), referenceCoord.y(), referenceCoord.z());
-            ((TileMultiblockNode) te).forfeitMultiblockSaveDelegate();
+            ((AbstractMultiblockNode) te).forfeitMultiblockSaveDelegate();
 
             referenceCoord = coord;
             part.becomeMultiblockSaveDelegate();
@@ -185,13 +191,13 @@ public abstract class GridController
      * Called when a new part is added to the machine. Good time to register things into lists.
      * @param newPart The part being added.
      */
-    protected abstract void onBlockAdded (TileMultiblockNode newPart);
+    protected abstract void onBlockAdded (AbstractMultiblockNode newPart);
 
     /**
      * Called when a part is removed from the machine. Good time to clean up lists.
      * @param oldPart The part being removed.
      */
-    protected abstract void onBlockRemoved (TileMultiblockNode oldPart);
+    protected abstract void onBlockRemoved (AbstractMultiblockNode oldPart);
 
     /**
      * Called when a machine is assembled from a disassembled state.
@@ -220,7 +226,7 @@ public abstract class GridController
      * Do housekeeping/callbacks, also nulls min/max coords.
      * @param part The part being removed.
      */
-    private void onDetachBlock (TileMultiblockNode part)
+    private void onDetachBlock (AbstractMultiblockNode part)
     {
         // Strip out this part
         part.onDetached(this);
@@ -243,7 +249,7 @@ public abstract class GridController
      * @param part The part to detach from this machine.
      * @param chunkUnloading Is this entity detaching due to the chunk unloading? If true, the multiblock will be paused instead of broken.
      */
-    public void detachBlock (TileMultiblockNode part, boolean chunkUnloading)
+    public void detachBlock (AbstractMultiblockNode part, boolean chunkUnloading)
     {
         if (chunkUnloading && this.assemblyState == AssemblyState.Assembled)
         {
@@ -386,7 +392,7 @@ public abstract class GridController
      */
     private void assembleMachine (AssemblyState oldState)
     {
-        for (TileMultiblockNode part : connectedParts)
+        for (AbstractMultiblockNode part : connectedParts)
         {
             part.onMachineAssembled(this);
         }
@@ -410,7 +416,7 @@ public abstract class GridController
      */
     private void disassembleMachine ()
     {
-        for (TileMultiblockNode part : connectedParts)
+        for (AbstractMultiblockNode part : connectedParts)
         {
             part.onMachineBroken();
         }
@@ -435,12 +441,12 @@ public abstract class GridController
         }
 
         TileEntity te;
-        Set<TileMultiblockNode> partsToAcquire = new HashSet<TileMultiblockNode>(other.connectedParts);
+        Set<AbstractMultiblockNode> partsToAcquire = new HashSet<AbstractMultiblockNode>(other.connectedParts);
 
         // releases all blocks and references gently so they can be incorporated into another multiblock
         other._onAssimilated(this);
 
-        for (TileMultiblockNode acquiredPart : partsToAcquire)
+        for (AbstractMultiblockNode acquiredPart : partsToAcquire)
         {
             // By definition, none of these can be the minimum block.
             if (acquiredPart.isInvalid())
@@ -469,9 +475,9 @@ public abstract class GridController
             if (worldObj.getChunkProvider().chunkExists(referenceCoord.getChunkX(), referenceCoord.getChunkZ()))
             {
                 TileEntity te = this.worldObj.getTileEntity(referenceCoord.x(), referenceCoord.y(), referenceCoord.z());
-                if (te instanceof TileMultiblockNode)
+                if (te instanceof AbstractMultiblockNode)
                 {
-                    ((TileMultiblockNode) te).forfeitMultiblockSaveDelegate();
+                    ((AbstractMultiblockNode) te).forfeitMultiblockSaveDelegate();
                 }
             }
             this.referenceCoord = null;
@@ -517,10 +523,6 @@ public abstract class GridController
             return;
         }
 
-        if (worldObj.isRemote)
-        {
-            updateClient();
-        }
         else if (updateServer())
         {
             // If this returns true, the server has changed its internal data.
@@ -556,13 +558,6 @@ public abstract class GridController
      * @return True if the multiblock should save data, i.e. its internal game state has changed. False otherwise.
      */
     protected abstract boolean updateServer ();
-
-    /**
-     * Client-side update loop. Generally, this shouldn't do anything, but if you want
-     * to do some interpolation or something, do it here.
-     */
-    @Deprecated
-    protected abstract void updateClient ();
 
     /**
      * The "frame" consists of the outer edges of the machine, plus the corners.
@@ -665,7 +660,7 @@ public abstract class GridController
         minimumCoord = new WorldPos(worldObj, Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE);
         maximumCoord = new WorldPos(worldObj, Integer.MIN_VALUE, Integer.MIN_VALUE, Integer.MIN_VALUE);
 
-        for (TileMultiblockNode part : connectedParts)
+        for (AbstractMultiblockNode part : connectedParts)
         {
             if (part.xCoord < minimumCoord.x())
             {
@@ -812,7 +807,7 @@ public abstract class GridController
     {
         StringBuilder sb = new StringBuilder();
         boolean first = true;
-        for (TileMultiblockNode part : connectedParts)
+        for (AbstractMultiblockNode part : connectedParts)
         {
             if (!first)
             {
@@ -830,8 +825,8 @@ public abstract class GridController
      */
     private void auditParts ()
     {
-        HashSet<TileMultiblockNode> deadParts = new HashSet<TileMultiblockNode>();
-        for (TileMultiblockNode part : connectedParts)
+        HashSet<AbstractMultiblockNode> deadParts = new HashSet<AbstractMultiblockNode>();
+        for (AbstractMultiblockNode part : connectedParts)
         {
             if (part.isInvalid() || worldObj.getTileEntity(part.xCoord, part.yCoord, part.zCoord) != part)
             {
@@ -849,7 +844,7 @@ public abstract class GridController
      * longer physically connected to the reference coordinate.
      * @return
      */
-    public Set<TileMultiblockNode> checkForDisconnections ()
+    public Set<AbstractMultiblockNode> checkForDisconnections ()
     {
         if (!this.shouldCheckForDisconnections)
         {
@@ -869,13 +864,13 @@ public abstract class GridController
         referenceCoord = null;
 
         // Reset visitations and find the minimum coordinate
-        Set<TileMultiblockNode> deadParts = new HashSet<TileMultiblockNode>();
+        Set<AbstractMultiblockNode> deadParts = new HashSet<AbstractMultiblockNode>();
         WorldPos c;
-        TileMultiblockNode referencePart = null;
+        AbstractMultiblockNode referencePart = null;
 
         int originalSize = connectedParts.size();
 
-        for (TileMultiblockNode part : connectedParts)
+        for (AbstractMultiblockNode part : connectedParts)
         {
             // This happens during chunk unload.
             if (!chunkProvider.chunkExists(part.xCoord >> 4, part.zCoord >> 4) || part.isInvalid())
@@ -924,9 +919,9 @@ public abstract class GridController
         }
 
         // Now visit all connected parts, breadth-first, starting from reference coord's part
-        TileMultiblockNode part;
-        LinkedList<TileMultiblockNode> partsToCheck = new LinkedList<TileMultiblockNode>();
-        TileMultiblockNode[] nearbyParts = null;
+        AbstractMultiblockNode part;
+        LinkedList<AbstractMultiblockNode> partsToCheck = new LinkedList<AbstractMultiblockNode>();
+        AbstractMultiblockNode[] nearbyParts = null;
         int visitedParts = 0;
 
         partsToCheck.add(referencePart);
@@ -938,7 +933,7 @@ public abstract class GridController
             visitedParts++;
 
             nearbyParts = part.getNeighboringParts(); // Chunk-safe on server, but not on client
-            for (TileMultiblockNode nearbyPart : nearbyParts)
+            for (AbstractMultiblockNode nearbyPart : nearbyParts)
             {
                 // Ignore different machines
                 if (nearbyPart.getMultiblockController() != this)
@@ -955,8 +950,8 @@ public abstract class GridController
         }
 
         // Finally, remove all parts that remain disconnected.
-        Set<TileMultiblockNode> removedParts = new HashSet<TileMultiblockNode>();
-        for (TileMultiblockNode orphanCandidate : connectedParts)
+        Set<AbstractMultiblockNode> removedParts = new HashSet<AbstractMultiblockNode>();
+        for (AbstractMultiblockNode orphanCandidate : connectedParts)
         {
             if (!orphanCandidate.isVisited())
             {
@@ -990,15 +985,15 @@ public abstract class GridController
      * have a valid tile entity. Chunk-safe.
      * @return A set of all parts which still have a valid tile entity.
      */
-    public Set<TileMultiblockNode> detachAllBlocks ()
+    public Set<AbstractMultiblockNode> detachAllBlocks ()
     {
         if (worldObj == null)
         {
-            return new HashSet<TileMultiblockNode>();
+            return new HashSet<AbstractMultiblockNode>();
         }
 
         IChunkProvider chunkProvider = worldObj.getChunkProvider();
-        for (TileMultiblockNode part : connectedParts)
+        for (AbstractMultiblockNode part : connectedParts)
         {
             if (chunkProvider.chunkExists(part.xCoord >> 4, part.zCoord >> 4))
             {
@@ -1006,8 +1001,8 @@ public abstract class GridController
             }
         }
 
-        Set<TileMultiblockNode> detachedParts = connectedParts;
-        connectedParts = new HashSet<TileMultiblockNode>();
+        Set<AbstractMultiblockNode> detachedParts = connectedParts;
+        connectedParts = new HashSet<AbstractMultiblockNode>();
         return detachedParts;
     }
 
@@ -1025,7 +1020,7 @@ public abstract class GridController
         TileEntity theChosenOne = null;
         referenceCoord = null;
 
-        for (TileMultiblockNode part : connectedParts)
+        for (AbstractMultiblockNode part : connectedParts)
         {
             if (part.isInvalid() || !chunkProvider.chunkExists(part.xCoord >> 4, part.zCoord >> 4))
             {
@@ -1042,7 +1037,7 @@ public abstract class GridController
 
         if (theChosenOne != null)
         {
-            ((TileMultiblockNode) theChosenOne).becomeMultiblockSaveDelegate();
+            ((AbstractMultiblockNode) theChosenOne).becomeMultiblockSaveDelegate();
         }
     }
 

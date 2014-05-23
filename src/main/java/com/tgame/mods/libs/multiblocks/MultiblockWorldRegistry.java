@@ -1,8 +1,8 @@
 package com.tgame.mods.libs.multiblocks;
 
 import com.tgame.mods.core.Settings;
+import com.tgame.mods.libs.multiblocks.grid.AbstractMultiblockNode;
 import com.tgame.mods.libs.multiblocks.grid.GridController;
-import com.tgame.mods.libs.multiblocks.grid.TileMultiblockNode;
 import net.minecraft.world.ChunkCoordIntPair;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.IChunkProvider;
@@ -24,16 +24,16 @@ public class MultiblockWorldRegistry
     // A list of orphan parts - parts which currently have no master, but should seek one this tick
     // Indexed by the hashed chunk coordinate
     // This can be added-to asynchronously via chunk loads!
-    private Set<TileMultiblockNode> orphanedParts;
+    private Set<AbstractMultiblockNode> orphanedParts;
 
     // A list of parts which have been detached during internal operations
-    private Set<TileMultiblockNode> detachedParts;
+    private Set<AbstractMultiblockNode> detachedParts;
 
     // A list of parts whose chunks have not yet finished loading
     // They will be added to the orphan list when they are finished loading.
     // Indexed by the hashed chunk coordinate
     // This can be added-to asynchronously via chunk loads!
-    private HashMap<Long, Set<TileMultiblockNode>> partsAwaitingChunkLoad;
+    private HashMap<Long, Set<AbstractMultiblockNode>> partsAwaitingChunkLoad;
 
     // Mutexes to protect lists which may be changed due to asynchronous events, such as chunk loads
     private Object partsAwaitingChunkLoadMutex;
@@ -47,10 +47,10 @@ public class MultiblockWorldRegistry
         deadControllers = new HashSet<GridController>();
         dirtyControllers = new HashSet<GridController>();
 
-        detachedParts = new HashSet<TileMultiblockNode>();
-        orphanedParts = new HashSet<TileMultiblockNode>();
+        detachedParts = new HashSet<AbstractMultiblockNode>();
+        orphanedParts = new HashSet<AbstractMultiblockNode>();
 
-        partsAwaitingChunkLoad = new HashMap<Long, Set<TileMultiblockNode>>();
+        partsAwaitingChunkLoad = new HashMap<Long, Set<AbstractMultiblockNode>>();
         partsAwaitingChunkLoadMutex = new Object();
         orphanedPartsMutex = new Object();
     }
@@ -94,7 +94,7 @@ public class MultiblockWorldRegistry
         List<Set<GridController>> mergePools = null;
         if (orphanedParts.size() > 0)
         {
-            Set<TileMultiblockNode> orphansToProcess = null;
+            Set<AbstractMultiblockNode> orphansToProcess = null;
 
             // Keep the synchronized block small. We can't iterate over orphanedParts directly
             // because the client does not know which chunks are actually loaded, so attachToNeighbors()
@@ -105,7 +105,7 @@ public class MultiblockWorldRegistry
                 if (orphanedParts.size() > 0)
                 {
                     orphansToProcess = orphanedParts;
-                    orphanedParts = new HashSet<TileMultiblockNode>();
+                    orphanedParts = new HashSet<AbstractMultiblockNode>();
                 }
             }
 
@@ -115,7 +115,7 @@ public class MultiblockWorldRegistry
 
                 // Process orphaned blocks
                 // These are blocks that exist in a valid chunk and require a controller
-                for (TileMultiblockNode orphan : orphansToProcess)
+                for (AbstractMultiblockNode orphan : orphansToProcess)
                 {
                     coord = orphan.getWorldLocation();
                     if (!chunkProvider.chunkExists(coord.getChunkX(), coord.getChunkZ()))
@@ -239,7 +239,7 @@ public class MultiblockWorldRegistry
         // physically connected to their master.
         if (dirtyControllers.size() > 0)
         {
-            Set<TileMultiblockNode> newlyDetachedParts = null;
+            Set<AbstractMultiblockNode> newlyDetachedParts = null;
             for (GridController controller : dirtyControllers)
             {
                 // Tell the machine to check if any parts are disconnected.
@@ -291,7 +291,7 @@ public class MultiblockWorldRegistry
         // Process detached blocks
         // Any blocks which have been detached this tick should be moved to the orphaned
         // list, and will be checked next tick to see if their chunk is still loaded.
-        for (TileMultiblockNode part : detachedParts)
+        for (AbstractMultiblockNode part : detachedParts)
         {
             // Ensure parts know they're detached
             part.assertDetached();
@@ -307,20 +307,20 @@ public class MultiblockWorldRegistry
      * If the chunk is not loaded, it will be added to a list of objects waiting for a chunkload.
      * @param part The part which is being added to this world.
      */
-    public void onPartAdded (TileMultiblockNode part)
+    public void onPartAdded (AbstractMultiblockNode part)
     {
         WorldPos worldLocation = part.getWorldLocation();
 
         if (!worldObj.getChunkProvider().chunkExists(worldLocation.getChunkX(), worldLocation.getChunkZ()))
         {
             // Part goes into the waiting-for-chunk-load list
-            Set<TileMultiblockNode> partSet;
+            Set<AbstractMultiblockNode> partSet;
             long chunkHash = worldLocation.getChunkXZHash();
             synchronized (partsAwaitingChunkLoadMutex)
             {
                 if (!partsAwaitingChunkLoad.containsKey(chunkHash))
                 {
-                    partSet = new HashSet<TileMultiblockNode>();
+                    partSet = new HashSet<AbstractMultiblockNode>();
                     partsAwaitingChunkLoad.put(chunkHash, partSet);
                 }
                 else
@@ -343,7 +343,7 @@ public class MultiblockWorldRegistry
      * This part is removed from any lists in which it may be, and its machine is marked for recalculation.
      * @param part The part which is being removed.
      */
-    public void onPartRemovedFromWorld (TileMultiblockNode part)
+    public void onPartRemovedFromWorld (AbstractMultiblockNode part)
     {
         WorldPos coord = part.getWorldLocation();
         if (coord != null)
@@ -452,7 +452,7 @@ public class MultiblockWorldRegistry
 
 	/* *** PRIVATE HELPERS *** */
 
-    private void addOrphanedPartThreadsafe (TileMultiblockNode part)
+    private void addOrphanedPartThreadsafe (AbstractMultiblockNode part)
     {
         synchronized (orphanedPartsMutex)
         {
@@ -460,7 +460,7 @@ public class MultiblockWorldRegistry
         }
     }
 
-    private void addAllOrphanedPartsThreadsafe (Collection<? extends TileMultiblockNode> parts)
+    private void addAllOrphanedPartsThreadsafe (Collection<? extends AbstractMultiblockNode> parts)
     {
         synchronized (orphanedPartsMutex)
         {
