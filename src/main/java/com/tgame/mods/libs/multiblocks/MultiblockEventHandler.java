@@ -13,14 +13,34 @@ import net.minecraftforge.event.world.ChunkEvent;
  */
 public class MultiblockEventHandler
 {
-    @SubscribeEvent
-    public void tickEvent(TickEvent event)
+    @SubscribeEvent(priority = EventPriority.HIGH)
+    public void worldTickEvent (TickEvent.WorldTickEvent event)
     {
+        switch (event.phase)
+        {
+        case START:
+            tickStart(event.world);
+            return;
+        case END:
+            tickEnd(event.world);
+            return;
+        default:
+            break;
+        }
+    }
 
+    private void tickStart (World world)
+    {
+        MultiblockRegistry.instance().tickStart(world);
+    }
+
+    private void tickEnd (World world)
+    {
+        MultiblockRegistry.instance().tickEnd(world);
     }
 
     @SubscribeEvent(priority = EventPriority.HIGHEST)
-    public void onChunkLoad(ChunkEvent.Load event)
+    public void onChunkLoad (ChunkEvent.Load event)
     {
         Chunk chunk = event.getChunk();
         World world = event.world;

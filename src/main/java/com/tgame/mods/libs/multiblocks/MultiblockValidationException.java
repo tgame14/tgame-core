@@ -1,4 +1,4 @@
-package com.tgame.mods.libs.multiblocks.grid;
+package com.tgame.mods.libs.multiblocks;
 
 /**
  * @since 23/05/14

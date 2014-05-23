@@ -2,6 +2,7 @@ package com.tgame.mods.libs.multiblocks.grid;
 
 import com.tgame.mods.core.Settings;
 import com.tgame.mods.libs.multiblocks.MultiblockRegistry;
+import com.tgame.mods.libs.multiblocks.MultiblockValidationException;
 import com.tgame.mods.libs.multiblocks.WorldPos;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -1046,7 +1047,7 @@ public abstract class GridController
     }
 
     // Disassembled -> Assembled; Assembled -> Disassembled OR Paused; Paused -> Assembled
-    protected enum AssemblyState
+    public enum AssemblyState
     {
         Disassembled, Assembled, Paused
     }
