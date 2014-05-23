@@ -44,6 +44,6 @@ public class MultiblockEventHandler
     {
         Chunk chunk = event.getChunk();
         World world = event.world;
-        //MultiblockRegistry.instance().
+        MultiblockRegistry.instance().onChunkLoaded(world, chunk.xPosition, chunk.zPosition);
     }
 }

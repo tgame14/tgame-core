@@ -107,7 +107,7 @@ public abstract class GridController implements IDataObject
      */
     public boolean hasBlock (WorldPos blockCoord)
     {
-        return connectedParts.contains(blockCoord);
+        return connectedParts.contains(worldObj.getTileEntity(blockCoord.x(), blockCoord.y(), blockCoord.z()));
     }
 
     /**
@@ -398,7 +398,7 @@ public abstract class GridController implements IDataObject
         }
 
         this.assemblyState = AssemblyState.Assembled;
-        if (oldState == assemblyState.Paused)
+        if (oldState == AssemblyState.Paused)
         {
             onMachineRestored();
         }
@@ -440,7 +440,7 @@ public abstract class GridController implements IDataObject
             throw new IllegalArgumentException("The controller with the lowest minimum-coord value must consume the one with the higher coords");
         }
 
-        TileEntity te;
+        TileEntity te; // Never used, to remove
         Set<AbstractMultiblockNode> partsToAcquire = new HashSet<AbstractMultiblockNode>(other.connectedParts);
 
         // releases all blocks and references gently so they can be incorporated into another multiblock
