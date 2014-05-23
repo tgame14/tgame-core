@@ -5,6 +5,7 @@ import cpw.mods.fml.common.registry.EntityRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.Item;
+import net.minecraft.tileentity.TileEntity;
 
 /**
  * @since 25/04/14
@@ -20,6 +21,12 @@ public class RegistryHandler
         IItemDefinition itemdef = new ItemDefinition(block, clazz);
         registryProxy.registerBlock(itemdef);
         return itemdef;
+    }
+
+    public void registerTile(Class<? extends TileEntity> clazz)
+    {
+        registryProxy.registerTile(clazz);
+
     }
 
     public IItemDefinition registerItem(Item item, Class<? extends Item> clazz)

@@ -1,26 +1,19 @@
 package com.tgame.mods.libs.multiblocks.grid;
 
-import com.tgame.mods.libs.multiblocks.WorldPos;
-import net.minecraft.nbt.NBTTagCompound;
+import java.util.Set;
 
 /**
- * implement this on tiles
- *
- * @since 10/03/14
+ * @since 19/05/14
  * @author tgame14
  */
-@Deprecated
 public interface IGridNode
 {
-    public WorldPos getWorldPos();
+    Class<? extends IGrid> getGridClassType ();
 
-    public IGrid getGrid();
+    IGrid createNewGrid ();
 
-    public void setGrid();
+    IGridHost getHost ();
 
-    public boolean canBeDelegate();
-
-    public boolean saveGridData(NBTTagCompound tag, String gridKey);
-
+    Set<IGrid> attachToNeighbors ();
 
 }

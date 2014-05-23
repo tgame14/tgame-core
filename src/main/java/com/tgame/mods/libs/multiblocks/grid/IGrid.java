@@ -1,27 +1,38 @@
 package com.tgame.mods.libs.multiblocks.grid;
 
 import cpw.mods.fml.common.eventhandler.Event;
-import cpw.mods.fml.common.gameevent.TickEvent;
-import net.minecraft.nbt.NBTTagCompound;
+import io.netty.buffer.ByteBuf;
+import net.minecraft.world.World;
+
+import java.util.Set;
 
 /**
- * @since 11/03/14
+ * @since 19/05/14
  * @author tgame14
  */
-@Deprecated
 public interface IGrid
 {
     public static final String NBT_SAVE_KEY = "gridDataStorage";
 
-    public void tickEvent(TickEvent event);
+    void onTick();
 
-    public IGridTicker getGridTicker(Class<? extends IGridTicker> clazz);
+    void updateMultiblockEntity();
 
-    public void postEventToGrid(Event event);
+    void postEventToGrid(Event event);
 
-    public void writeToDelegate();
+    ByteBuf writeToDelegate();
 
-    public void readFromDelegate(NBTTagCompound nbt);
+    void readFromDlegate(ByteBuf data);
 
+    World world();
 
+    Set<IGridNode> getNodes();
+
+    boolean isEmpty();
+
+    void attachNode(IGridNode node);
+
+    void detachNode(IGridNode node);
+
+    boolean shouldConsume(IGrid other);
 }

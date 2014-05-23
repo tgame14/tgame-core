@@ -1,7 +1,7 @@
 package com.tgame.mods.libs.multiblocks.gridevents;
 
-import com.tgame.mods.libs.multiblocks.ngrid.IGrid;
-import com.tgame.mods.libs.multiblocks.ngrid.IGridNode;
+import com.tgame.mods.libs.multiblocks.grid.IGrid;
+import com.tgame.mods.libs.multiblocks.grid.IGridNode;
 import cpw.mods.fml.common.eventhandler.Event;
 
 /**

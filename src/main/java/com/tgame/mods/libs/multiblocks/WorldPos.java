@@ -1,6 +1,8 @@
 package com.tgame.mods.libs.multiblocks;
 
+import net.minecraft.world.ChunkCoordIntPair;
 import net.minecraft.world.World;
+import net.minecraftforge.common.util.ForgeDirection;
 
 /**
  * @since 10/03/14
@@ -14,13 +16,49 @@ public class WorldPos implements Comparable<WorldPos>, Cloneable
 
     protected World world;
 
-    public WorldPos(World world, int x, int y, int z)
+    public WorldPos (World world, int x, int y, int z)
     {
         this.world = world;
 
         this.x = x;
         this.y = y;
         this.z = z;
+    }
+
+    public int getChunkX ()
+    {
+        return x >> 4;
+    }
+
+    public int getChunkZ ()
+    {
+        return z >> 4;
+    }
+
+    public long getChunkXZHash ()
+    {
+        return ChunkCoordIntPair.chunkXZ2Int(x >> 4, z >> 4);
+    }
+
+    public WorldPos translate (ForgeDirection dir)
+    {
+        this.x += dir.offsetX;
+        this.y += dir.offsetY;
+        this.z += dir.offsetZ;
+        return this;
+    }
+
+    public WorldPos[] getNeighbors ()
+    {
+        return new WorldPos[]
+                {
+                        new WorldPos(world(), x + 1, y, z),
+                        new WorldPos(world(), x - 1, y, z),
+                        new WorldPos(world(), x, y + 1, z),
+                        new WorldPos(world(), x, y - 1, z),
+                        new WorldPos(world(), x, y, z + 1),
+                        new WorldPos(world(), x, y, z - 1)
+                };
     }
 
 
@@ -62,7 +100,7 @@ public class WorldPos implements Comparable<WorldPos>, Cloneable
         }
     }
 
-    public int getX ()
+    public int x ()
     {
         return x;
     }
@@ -72,7 +110,7 @@ public class WorldPos implements Comparable<WorldPos>, Cloneable
         this.x = x;
     }
 
-    public int getY ()
+    public int y ()
     {
         return y;
     }
@@ -82,7 +120,7 @@ public class WorldPos implements Comparable<WorldPos>, Cloneable
         this.y = y;
     }
 
-    public int getZ ()
+    public int z ()
     {
         return z;
     }
@@ -92,7 +130,7 @@ public class WorldPos implements Comparable<WorldPos>, Cloneable
         this.z = z;
     }
 
-    public World getWorld ()
+    public World world ()
     {
         return world;
     }
@@ -136,6 +174,11 @@ public class WorldPos implements Comparable<WorldPos>, Cloneable
         return true;
     }
 
+    public boolean equals (int x, int y, int z)
+    {
+        return this.equals(new WorldPos(world, x, y, z));
+    }
+
     @Override
     public int hashCode ()
     {
@@ -147,7 +190,7 @@ public class WorldPos implements Comparable<WorldPos>, Cloneable
     }
 
     @Override
-    protected Object clone () throws CloneNotSupportedException
+    public WorldPos clone ()
     {
         return new WorldPos(this.world, this.x, this.y, this.z);
     }

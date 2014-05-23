@@ -1,6 +1,7 @@
 package com.tgame.mods.libs.registry;
 
 import cpw.mods.fml.common.registry.GameRegistry;
+import net.minecraft.tileentity.TileEntity;
 
 /**
  * @since 25/04/14
@@ -25,7 +26,12 @@ public class CommonRegistryProxy
 
     public void registerTile(IItemDefinition itemDefinition)
     {
-        GameRegistry.registerTileEntity(itemDefinition.getTile(), itemDefinition.getTile().getName());
+        registerTile(itemDefinition.getTile());
+    }
+
+    public void registerTile(Class<? extends TileEntity> clazz)
+    {
+        GameRegistry.registerTileEntity(clazz, clazz.getName());
     }
 
 }
