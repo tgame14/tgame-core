@@ -36,7 +36,7 @@ public abstract class TileSimpleNode extends AbstractMultiblockNode
     // Handlers from MultiblockTileEntityBase
     @Override
     public void onAttached(GridController newController) {
-        //super.onAttached(newController); TODO: RENABLE
+        super.onAttached(newController);
         recalculateOutwardsDirection(newController.getMinimumCoord(), newController.getMaximumCoord());
     }
 
@@ -54,6 +54,12 @@ public abstract class TileSimpleNode extends AbstractMultiblockNode
     public void onMachineBroken() {
        facing = MultiblockFacing.UNKNOWN;
         outwards = ForgeDirection.UNKNOWN;
+    }
+
+    @Override
+    public boolean isConnected ()
+    {
+        return this.controller != null;
     }
 
     // Positional helpers

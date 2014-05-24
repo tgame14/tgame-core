@@ -13,6 +13,8 @@ import java.util.Set;
 public abstract class AbstractMultiblockNode extends TileEntity
 {
 
+    protected GridController controller;
+
     /**
      *
      * @return should tile tick by itself
@@ -42,7 +44,10 @@ public abstract class AbstractMultiblockNode extends TileEntity
      * Called after this block has been attached to a new multiblock controller.
      * @param newController The new multiblock controller to which this tile entity is attached.
      */
-    public abstract void onAttached (GridController newController);
+    public void onAttached (GridController newController)
+    {
+        this.controller = newController;
+    }
 
     /**
      * Called after this block has been detached from a multiblock controller.
