@@ -62,30 +62,6 @@ public abstract class SimpleGridController extends GridController
     }
 
     @Override
-    protected int getMinimumNumberOfBlocksForAssembledMachine ()
-    {
-        return 0;
-    }
-
-    @Override
-    protected int getMaximumXSize ()
-    {
-        return 32;
-    }
-
-    @Override
-    protected int getMaximumZSize ()
-    {
-        return 32;
-    }
-
-    @Override
-    protected int getMaximumYSize ()
-    {
-        return 32;
-    }
-
-    @Override
     protected void isMachineWhole () throws MultiblockValidationException
     {
         // throw an MultiblockValidationException Exception if you for some reason don't want the multiblock to form
@@ -259,16 +235,6 @@ public abstract class SimpleGridController extends GridController
     protected void onAssimilated (GridController assimilator)
     {
 
-    }
-
-    /**
-     *
-     * @return if chunk data is dirty of multiblock is and if data should refresh
-     */
-    @Override
-    protected boolean updateServer ()
-    {
-        return false;
     }
 
     @Override
