@@ -35,6 +35,13 @@ public class FluidGridController extends SimpleGridController implements IFluidT
     }
 
     @Override
+    protected boolean updateServer ()
+    {
+        // no need to tick really, a tank is a tank is a tank
+        return false;
+    }
+
+    @Override
     protected void isBlockGoodForFrame (World world, int x, int y, int z) throws MultiblockValidationException
     {
         if (!world.getBlock(x, y, z).hasTileEntity(world.getBlockMetadata(x, y, z)))
