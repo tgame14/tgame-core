@@ -4,12 +4,21 @@ import com.tgame.mods.config.Config;
 import com.tgame.mods.config.ConfigHandler;
 import com.tgame.mods.config.ConfigScanner;
 import com.tgame.mods.interfaces.IMod;
+import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
+import cpw.mods.fml.common.registry.GameData;
+import cpw.mods.fml.common.registry.GameRegistry;
+import net.minecraft.item.Item;
 import net.minecraftforge.common.config.Configuration;
+
+import java.io.File;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * @since 10/03/14
@@ -53,9 +62,12 @@ public class TgameCore implements IMod
     public void postInit(FMLPostInitializationEvent event)
     {
         ConfigHandler.configure(Settings.CONFIGURATION, Settings.DOMAIN);
+		generateRecipeDump(Loader.instance().getConfigDir());
     }
 
+	private void generateRecipeDump(File file)
+	{
+		System.out.println(Item.itemRegistry.getKeys());
 
-
-
+	}
 }

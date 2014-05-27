@@ -35,9 +35,9 @@ public class ClientRegistryProxy extends CommonRegistryProxy
     }
 
     @Override
-    public void registerBlock (IItemDefinition itemDefinition)
+    public void registerBlock (IItemDefinition idef)
     {
-        super.registerBlock(itemDefinition);
+        super.registerBlock(idef);
     }
 
     @Override
