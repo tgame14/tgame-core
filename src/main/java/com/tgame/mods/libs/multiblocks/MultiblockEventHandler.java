@@ -13,7 +13,7 @@ import net.minecraftforge.event.world.ChunkEvent;
  */
 public class MultiblockEventHandler
 {
-    @SubscribeEvent(priority = EventPriority.HIGH)
+    @SubscribeEvent
     public void worldTickEvent (TickEvent.WorldTickEvent event)
     {
         switch (event.phase)
@@ -39,7 +39,7 @@ public class MultiblockEventHandler
         MultiblockRegistry.instance().tickEnd(world);
     }
 
-    @SubscribeEvent(priority = EventPriority.HIGHEST)
+    @SubscribeEvent
     public void onChunkLoad (ChunkEvent.Load event)
     {
         Chunk chunk = event.getChunk();
