@@ -29,6 +29,11 @@ public class MultiblockEventHandler
         }
     }
 
+	public void ClientTickEvent(TickEvent.ClientTickEvent event)
+	{
+
+	}
+
     private void tickStart (World world)
     {
         MultiblockRegistry.instance().tickStart(world);
