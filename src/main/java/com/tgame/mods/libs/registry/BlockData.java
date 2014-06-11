@@ -16,7 +16,7 @@ import java.lang.annotation.Target;
 @Target(ElementType.TYPE)
 public @interface BlockData
 {
-    public Class<? extends TileEntity> tileClass ();
+    public Class<? extends TileEntity>[] tileClass ();
 
     public Class<? extends ItemBlock> itemBlockClass () default ItemBlock.class;
 }

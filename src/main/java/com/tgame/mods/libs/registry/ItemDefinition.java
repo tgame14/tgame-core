@@ -17,7 +17,7 @@ import java.lang.annotation.Annotation;
 class ItemDefinition implements IItemDefinition
 {
     protected Block block;
-    protected Class<? extends TileEntity> tileClass;
+    protected Class<? extends TileEntity>[] tileClass;
     protected Class<? extends ItemBlock> itemBlockClass;
 
     protected Item item;
@@ -75,7 +75,7 @@ class ItemDefinition implements IItemDefinition
     }
 
     @Override
-    public Class<? extends TileEntity> getTile ()
+    public Class<? extends TileEntity>[] getTile ()
     {
         return tileClass;
     }

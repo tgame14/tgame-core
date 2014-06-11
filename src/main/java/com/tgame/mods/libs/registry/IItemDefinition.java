@@ -36,7 +36,7 @@ public interface IItemDefinition
     /**
      * @return the {@link net.minecraft.tileentity.TileEntity} Class if applicable.
      */
-    Class<? extends TileEntity> getTile ();
+    Class<? extends TileEntity>[] getTile ();
 
     ItemStack getItemStack(int amount, int meta);
 

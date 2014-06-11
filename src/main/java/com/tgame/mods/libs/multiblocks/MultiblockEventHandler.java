@@ -3,6 +3,7 @@ package com.tgame.mods.libs.multiblocks;
 import cpw.mods.fml.common.eventhandler.EventPriority;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent;
+import net.minecraft.client.Minecraft;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.event.world.ChunkEvent;
@@ -20,10 +21,10 @@ public class MultiblockEventHandler
         {
         case START:
             tickStart(event.world);
-            return;
+            break;
         case END:
             tickEnd(event.world);
-            return;
+            break;
         default:
             break;
         }
@@ -31,7 +32,33 @@ public class MultiblockEventHandler
 
 	public void ClientTickEvent(TickEvent.ClientTickEvent event)
 	{
+		Minecraft mc = Minecraft.getMinecraft();
 
+		if (mc.theWorld == null)
+		{
+			return;
+		}
+
+
+		switch (event.phase)
+		{
+			case START:
+				tickStart(Minecraft.getMinecraft().theWorld);
+				break;
+			case END:
+				tickEnd(Minecraft.getMinecraft().theWorld);
+				break;
+			default:
+				break;
+		}
+	}
+
+	@SubscribeEvent
+	public void onChunkLoad (ChunkEvent.Load event)
+	{
+		Chunk chunk = event.getChunk();
+		World world = event.world;
+		MultiblockRegistry.instance().onChunkLoaded(world, chunk.xPosition, chunk.zPosition);
 	}
 
     private void tickStart (World world)
@@ -42,13 +69,5 @@ public class MultiblockEventHandler
     private void tickEnd (World world)
     {
         MultiblockRegistry.instance().tickEnd(world);
-    }
-
-    @SubscribeEvent
-    public void onChunkLoad (ChunkEvent.Load event)
-    {
-        Chunk chunk = event.getChunk();
-        World world = event.world;
-        MultiblockRegistry.instance().onChunkLoaded(world, chunk.xPosition, chunk.zPosition);
     }
 }

@@ -1,9 +1,11 @@
 package com.tgame.mods.libs.registry;
 
+import com.tgame.mods.core.Settings;
 import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import org.apache.logging.log4j.Level;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -31,12 +33,22 @@ public class CommonRegistryProxy
 
 	public void registerTile(IItemDefinition itemDefinition)
 	{
-		registerTile(itemDefinition.getTile());
+		for (int i = 0; i < itemDefinition.getTile().length; i++)
+		{
+			registerTile(itemDefinition.getTile()[i]);
+		}
 	}
 
 	public void registerTile(Class<? extends TileEntity> clazz)
 	{
+		try
+		{
 		GameRegistry.registerTileEntity(clazz, clazz.getName());
+		}
+		catch (IllegalArgumentException ex)
+		{
+			Settings.LOGGER.catching(Level.WARN, ex);
+		}
 	}
 
 }
