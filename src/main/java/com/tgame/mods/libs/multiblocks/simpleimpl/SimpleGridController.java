@@ -9,6 +9,8 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 
 /**
+ * This implementation refers to the standard multiblocks, known as rectangles. use with care.
+ *
  * @author tgame14
  * @since 23/05/14
  */
@@ -110,7 +112,7 @@ public abstract class SimpleGridController extends GridController
 			throw new MultiblockValidationException(String.format("Machine is too small, it must be at least %d blocks in the Z dimension", minZ));
 		}
 
-		TileEntity te = null;
+		TileEntity te;
 		TileSimpleNode part;
 
 		for (int x = minimumCoord.x(); x <= maximumCoord.x(); x++)

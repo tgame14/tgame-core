@@ -1,5 +1,6 @@
-package com.tgame.mods.libs.inventory;
+package com.tgame.mods.libs.inventory.simpleimpl;
 
+import com.tgame.mods.libs.inventory.IInventoryStorage;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -9,7 +10,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
- * This is a default implementation of {@link IInventoryStorage}
+ * This is a default implementation of {@link com.tgame.mods.libs.inventory.IInventoryStorage}
  * it is encouraged to use this implementation or extend it rather than directly implementing it.
  *
  * @author tgame14
