@@ -9,14 +9,14 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * @since 11/05/14
  * @author tgame14
+ * @since 11/05/14
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
 public @interface BlockData
 {
-    public Class<? extends TileEntity>[] tileClass ();
+	public Class<? extends TileEntity>[] tileClass();
 
-    public Class<? extends ItemBlock> itemBlockClass () default ItemBlock.class;
+	public Class<? extends ItemBlock> itemBlockClass() default ItemBlock.class;
 }

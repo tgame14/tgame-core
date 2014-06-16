@@ -43,6 +43,5 @@ public class GridControllerGUI extends JComponent
 		frame.setVisible(true);
 
 
-
 	}
 }

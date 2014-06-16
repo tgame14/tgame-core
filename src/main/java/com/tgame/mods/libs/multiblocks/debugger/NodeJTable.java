@@ -11,7 +11,7 @@ import javax.swing.*;
 public class NodeJTable extends JTable
 {
 	private GridController grid;
-	private static String[] columnNames = {"Type", "WorldPos", "NBT"};
+	private static String[] columnNames = { "Type", "WorldPos", "NBT" };
 
 	public NodeJTable(GridController newGrid)
 	{
@@ -21,8 +21,6 @@ public class NodeJTable extends JTable
 		this.grid = newGrid;
 
 	}
-
-
 
 
 }

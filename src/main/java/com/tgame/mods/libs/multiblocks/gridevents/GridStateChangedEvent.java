@@ -5,17 +5,17 @@ import cpw.mods.fml.common.eventhandler.Event;
 import net.minecraft.world.World;
 
 /**
- * @since 23/05/14
  * @author tgame14
+ * @since 23/05/14
  */
 public class GridStateChangedEvent extends Event
 {
-    public final World world;
-    public final GridController.AssemblyState state;
+	public final World world;
+	public final GridController.AssemblyState state;
 
-    public GridStateChangedEvent (World world, GridController.AssemblyState state)
-    {
-        this.world = world;
-        this.state = state;
-    }
+	public GridStateChangedEvent(World world, GridController.AssemblyState state)
+	{
+		this.world = world;
+		this.state = state;
+	}
 }

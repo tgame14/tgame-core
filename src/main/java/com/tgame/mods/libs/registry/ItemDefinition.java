@@ -11,87 +11,87 @@ import net.minecraftforge.client.IItemRenderer;
 import java.lang.annotation.Annotation;
 
 /**
- * @since 25/04/14
  * @author tgame14
+ * @since 25/04/14
  */
 class ItemDefinition implements IItemDefinition
 {
-    protected Block block;
-    protected Class<? extends TileEntity>[] tileClass;
-    protected Class<? extends ItemBlock> itemBlockClass;
+	protected Block block;
+	protected Class<? extends TileEntity>[] tileClass;
+	protected Class<? extends ItemBlock> itemBlockClass;
 
-    protected Item item;
-    protected Class<? extends IItemRenderer> itemRenderClass;
+	protected Item item;
+	protected Class<? extends IItemRenderer> itemRenderClass;
 
-    public ItemDefinition (Block block, Class<? extends Block> clazz)
-    {
-        this.block = block;
-        for (Annotation anote : clazz.getAnnotations())
-        {
-            if (anote instanceof BlockData)
-            {
-                BlockData data = (BlockData) anote;
-                this.tileClass = data.tileClass();
-                this.itemBlockClass = data.itemBlockClass();
-            }
-        }
-        Settings.LOGGER.info("Registering Block " + getBlock().getUnlocalizedName());
-    }
+	public ItemDefinition(Block block, Class<? extends Block> clazz)
+	{
+		this.block = block;
+		for (Annotation anote : clazz.getAnnotations())
+		{
+			if (anote instanceof BlockData)
+			{
+				BlockData data = (BlockData) anote;
+				this.tileClass = data.tileClass();
+				this.itemBlockClass = data.itemBlockClass();
+			}
+		}
+		Settings.LOGGER.info("Registering Block " + getBlock().getUnlocalizedName());
+	}
 
-    public ItemDefinition (Item item, Class<? extends Item> clazz)
-    {
-        this.item = item;
-        if (clazz.getAnnotation(ItemData.class) != null)
-        {
-            ItemData data = clazz.getAnnotation(ItemData.class);
-            this.itemRenderClass = data.itemRendererClass();
+	public ItemDefinition(Item item, Class<? extends Item> clazz)
+	{
+		this.item = item;
+		if (clazz.getAnnotation(ItemData.class) != null)
+		{
+			ItemData data = clazz.getAnnotation(ItemData.class);
+			this.itemRenderClass = data.itemRendererClass();
 
-            Settings.LOGGER.warn("IItemRender class: " + this.itemRenderClass);
-        }
-    }
+			Settings.LOGGER.warn("IItemRender class: " + this.itemRenderClass);
+		}
+	}
 
-    @Override
-    public Block getBlock ()
-    {
-        return block;
-    }
+	@Override
+	public Block getBlock()
+	{
+		return block;
+	}
 
-    @Override
-    public Class<? extends ItemBlock> getItemBlockClass ()
-    {
-        return this.itemBlockClass;
-    }
+	@Override
+	public Class<? extends ItemBlock> getItemBlockClass()
+	{
+		return this.itemBlockClass;
+	}
 
-    @Override
-    public Item getItem ()
-    {
-        return this.item;
-    }
+	@Override
+	public Item getItem()
+	{
+		return this.item;
+	}
 
-    @Override
-    public Class<? extends IItemRenderer> getIItemRendererClass ()
-    {
-        return this.itemRenderClass;
-    }
+	@Override
+	public Class<? extends IItemRenderer> getIItemRendererClass()
+	{
+		return this.itemRenderClass;
+	}
 
-    @Override
-    public Class<? extends TileEntity>[] getTile ()
-    {
-        return tileClass;
-    }
+	@Override
+	public Class<? extends TileEntity>[] getTile()
+	{
+		return tileClass;
+	}
 
-    @Override
-    public ItemStack getItemStack (int amount, int meta)
-    {
-        if (this.item != null)
-        {
-            return new ItemStack(this.item, amount, meta);
-        }
-        else if (this.block != null)
-        {
-            return new ItemStack(this.block, amount, meta);
-        }
-        return null;
-    }
+	@Override
+	public ItemStack getItemStack(int amount, int meta)
+	{
+		if (this.item != null)
+		{
+			return new ItemStack(this.item, amount, meta);
+		}
+		else if (this.block != null)
+		{
+			return new ItemStack(this.block, amount, meta);
+		}
+		return null;
+	}
 
 }

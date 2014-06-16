@@ -49,7 +49,7 @@ public class Vec3Utility
 		}
 	}
 
-	public static MovingObjectPosition rayTraceBlocks(World world,Vec3 origin, Vec3 target, boolean collisionFlag)
+	public static MovingObjectPosition rayTraceBlocks(World world, Vec3 origin, Vec3 target, boolean collisionFlag)
 	{
 		return world.rayTraceBlocks(origin, target);
 	}
@@ -62,7 +62,7 @@ public class Vec3Utility
 	 *               getDeltaPositionFromRotation()
 	 * @return The target hit.
 	 */
-	public static MovingObjectPosition rayTraceEntities(World world,Vec3 origin, Vec3 target)
+	public static MovingObjectPosition rayTraceEntities(World world, Vec3 origin, Vec3 target)
 	{
 		MovingObjectPosition pickedEntity = null;
 		Vec3 startingPosition = origin;

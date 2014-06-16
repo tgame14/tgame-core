@@ -1,25 +1,25 @@
 package com.tgame.mods.core;
 
 /**
- * @since 11/03/14
  * @author tgame14
+ * @since 11/03/14
  */
 public class CommonProxyBase
 {
-    public void preInit()
-    {
+	public void preInit()
+	{
 
-    }
+	}
 
-    public void init()
-    {
+	public void init()
+	{
 
-    }
+	}
 
-    public void postInit()
-    {
+	public void postInit()
+	{
 
-    }
+	}
 
 
 }
