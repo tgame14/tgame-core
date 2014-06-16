@@ -30,6 +30,7 @@ public class MultiblockEventHandler
         }
     }
 
+	@SubscribeEvent
 	public void ClientTickEvent(TickEvent.ClientTickEvent event)
 	{
 		Minecraft mc = Minecraft.getMinecraft();
@@ -43,10 +44,10 @@ public class MultiblockEventHandler
 		switch (event.phase)
 		{
 			case START:
-				tickStart(Minecraft.getMinecraft().theWorld);
+				tickStart(mc.theWorld);
 				break;
 			case END:
-				tickEnd(Minecraft.getMinecraft().theWorld);
+				tickEnd(mc.theWorld);
 				break;
 			default:
 				break;

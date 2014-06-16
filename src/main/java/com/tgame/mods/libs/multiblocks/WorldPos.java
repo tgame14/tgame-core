@@ -189,7 +189,13 @@ public class WorldPos implements Comparable<WorldPos>, Cloneable
         return result;
     }
 
-    @Override
+	@Override
+	public String toString()
+	{
+		return "x: " + this.x() + ", y: " + this.y() + ", z: " + this.z();
+	}
+
+	@Override
     public WorldPos clone ()
     {
         return new WorldPos(this.world, this.x, this.y, this.z);

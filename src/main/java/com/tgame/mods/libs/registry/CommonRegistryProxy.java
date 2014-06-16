@@ -47,7 +47,8 @@ public class CommonRegistryProxy
 		}
 		catch (IllegalArgumentException ex)
 		{
-			Settings.LOGGER.catching(Level.WARN, ex);
+			// this happens when registering the same block origin twice, it is a unavoidable event considering using annotations
+			//Settings.LOGGER.catching(Level.WARN, ex);
 		}
 	}
 

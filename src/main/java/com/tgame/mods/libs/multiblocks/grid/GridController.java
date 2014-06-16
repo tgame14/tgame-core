@@ -11,9 +11,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.IChunkProvider;
 
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Extend this class to have a new controller, the rest is already handled Intenally
@@ -35,6 +33,7 @@ public abstract class GridController implements IDataObject
 
     protected HashSet<AbstractMultiblockNode> connectedParts;
     protected boolean debugMode;
+
     /** This is a deterministically-picked coordinate that identifies this
      * multiblock uniquely in its dimension.
      * Currently, this is the coord with the lowest X, Y and Z coordinates, in that order of evaluation.
@@ -1040,6 +1039,28 @@ public abstract class GridController implements IDataObject
             ((AbstractMultiblockNode) theChosenOne).becomeMultiblockSaveDelegate();
         }
     }
+
+	/**
+	 *
+	 * @return a matrix containing data about all nodes
+	 */
+	public Object[][] getNodeTableData()
+	{
+		Object[][] data = new Object[this.getNumConnectedBlocks()][3];
+		int i = 0;
+		for (AbstractMultiblockNode node : connectedParts)
+		{
+			NBTTagCompound tag = new NBTTagCompound();
+			node.writeToNBT(tag);
+			data[i] = new Object[] {node.getClass().getSimpleName(), node.getWorldLocation().toString(), tag.toString()};
+			i++;
+		}
+
+
+		Settings.LOGGER.info(" ARRAY DATA" + Arrays.toString(data));
+		return data;
+
+	}
 
     // Disassembled -> Assembled; Assembled -> Disassembled OR Paused; Paused -> Assembled
     public enum AssemblyState
