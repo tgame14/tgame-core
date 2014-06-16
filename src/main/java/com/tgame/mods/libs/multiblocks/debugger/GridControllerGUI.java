@@ -1,8 +1,6 @@
 package com.tgame.mods.libs.multiblocks.debugger;
 
 import com.tgame.mods.libs.multiblocks.grid.GridController;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import javax.swing.*;
 import java.awt.*;
@@ -15,8 +13,7 @@ import java.awt.*;
 public class GridControllerGUI extends JComponent
 {
 
-	private static final Font font = new Font("Monospaced", 0, 12);
-	private static final Logger frameLogger = LogManager.getLogger("GridControllerGUI");
+	private static final Font font = new Font("Monospaced", 0, 14);
 
 	protected GridController controller;
 
@@ -27,6 +24,7 @@ public class GridControllerGUI extends JComponent
 		this.controller = controller;
 		this.setPreferredSize(new Dimension(854, 480));
 		this.setLayout(new BorderLayout());
+		this.setFont(font);
 
 		this.add(new NodeJTable(this.controller), BorderLayout.CENTER);
 
