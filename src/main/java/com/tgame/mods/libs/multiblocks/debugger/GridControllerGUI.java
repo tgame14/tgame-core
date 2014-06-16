@@ -26,9 +26,9 @@ public class GridControllerGUI extends JComponent
 
 		this.controller = controller;
 		this.setPreferredSize(new Dimension(854, 480));
-		this.setLayout(new GridBagLayout());
+		this.setLayout(new BorderLayout());
 
-		this.add(new NodeJComponent(this.controller), "Center");
+		this.add(new NodeJTable(this.controller), BorderLayout.CENTER);
 
 
 	}
