@@ -191,7 +191,7 @@ public class WorldPos implements Comparable<WorldPos>, Cloneable
 	@Override
 	public String toString()
 	{
-		return "x: " + this.x() + ", y: " + this.y() + ", z: " + this.z();
+		return "DimId: " + this.world().provider.dimensionId + ", x: " + this.x() + ", y: " + this.y() + ", z: " + this.z();
 	}
 
 	@Override
