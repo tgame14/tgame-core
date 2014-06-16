@@ -12,15 +12,11 @@ import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
-import cpw.mods.fml.common.registry.GameData;
-import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.item.Item;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
 
 import java.io.File;
-import java.util.LinkedList;
-import java.util.List;
 
 /**
  * @since 10/03/14
@@ -51,7 +47,10 @@ public class TgameCore implements IMod
         ConfigScanner.instance().generateSets(event.getAsmData());
         Settings.CONFIGURATION = new Configuration(event.getSuggestedConfigurationFile());
 
-		FMLCommonHandler.instance().bus().register(new MultiblockEventHandler());
+		MultiblockEventHandler handler = new MultiblockEventHandler();
+		FMLCommonHandler.instance().bus().register(handler);
+		MinecraftForge.EVENT_BUS.register(handler);
+
     }
 
     @Override

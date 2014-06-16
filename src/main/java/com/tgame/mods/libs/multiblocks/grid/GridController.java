@@ -1056,8 +1056,6 @@ public abstract class GridController implements IDataObject
 			i++;
 		}
 
-
-		Settings.LOGGER.info(" ARRAY DATA" + Arrays.toString(data));
 		return data;
 
 	}
