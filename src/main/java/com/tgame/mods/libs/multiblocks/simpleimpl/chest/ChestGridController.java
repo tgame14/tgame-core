@@ -1,7 +1,6 @@
 package com.tgame.mods.libs.multiblocks.simpleimpl.chest;
 
 import com.tgame.mods.libs.inventory.IInventoryHandler;
-import com.tgame.mods.libs.inventory.IInventoryStorage;
 import com.tgame.mods.libs.inventory.simpleimpl.InventoryStorage;
 import com.tgame.mods.libs.multiblocks.simpleimpl.SimpleGridController;
 import net.minecraft.item.ItemStack;
@@ -17,28 +16,13 @@ import java.util.List;
 public class ChestGridController extends SimpleGridController implements IInventoryHandler
 {
 
-	protected IInventoryStorage input;
-	protected IInventoryStorage output;
+	protected InventoryStorage inv;
 
 	public ChestGridController(World world)
 	{
 		super(world);
 
-		this.input = null;
-		this.output = null;
-	}
-
-	@Override
-	protected void onMachineAssembled()
-	{
-		this.input = new InventoryStorage(24);
-		this.output = new InventoryStorage(24);
-	}
-
-	@Override
-	protected void onMachineDisassembled()
-	{
-		super.onMachineDisassembled();
+		this.inv = new InventoryStorage(1);
 	}
 
 	@Override
@@ -56,42 +40,42 @@ public class ChestGridController extends SimpleGridController implements IInvent
 	@Override
 	public ItemStack insertItem(ForgeDirection from, ItemStack item, boolean simulate)
 	{
-		return null;
+		return this.inv.insertItem(item, simulate);
 	}
 
 	@Override
 	public ItemStack extractItem(ForgeDirection from, ItemStack item, boolean simulate)
 	{
-		return null;
+		return this.inv.extractItem(item, simulate);
 	}
 
 	@Override
 	public ItemStack extractItem(ForgeDirection from, int maxExtract, boolean simulate)
 	{
-		return null;
+		return this.inv.extractItem(maxExtract, simulate);
 	}
 
 	@Override
 	public List<ItemStack> getInventoryContents(ForgeDirection from)
 	{
-		return null;
+		return this.inv.getInventoryContents();
 	}
 
 	@Override
 	public int getSizeInventory(ForgeDirection from)
 	{
-		return 0;
+		return this.inv.getSizeInventory();
 	}
 
 	@Override
 	public boolean isEmpty(ForgeDirection from)
 	{
-		return false;
+		return this.inv.isEmpty();
 	}
 
 	@Override
 	public boolean isFull(ForgeDirection from)
 	{
-		return false;
+		return this.inv.isFull();
 	}
 }

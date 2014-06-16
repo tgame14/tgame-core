@@ -21,7 +21,7 @@ import java.util.Set;
  */
 public abstract class TileMultiblockNode extends AbstractMultiblockNode
 {
-	private GridController controller;
+
 	private boolean visited;
 
 	private boolean saveMultiblockData;
