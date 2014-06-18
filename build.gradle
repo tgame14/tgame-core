@@ -25,10 +25,10 @@ configFile.withReader {
     ext.config = new ConfigSlurper().parse prop
 }
 
-
 apply plugin: 'forge'
 apply plugin: 'curseforge'
 apply plugin: 'maven-publish'
+apply plugin: 'java'
 
 version = config.mod_version
 group = "com.tgame.mods" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
@@ -38,6 +38,10 @@ if (System.getenv().BUILD_NUMBER != null)
     version += ".${System.getenv().BUILD_NUMBER}"
 else
     version += " - err"
+
+dependencies {
+    testCompile group: 'junit', name: 'junit', version: '4.11'
+}
 
 minecraft {
     version = "${config.minecraft_version}-${config.forge_version}"
