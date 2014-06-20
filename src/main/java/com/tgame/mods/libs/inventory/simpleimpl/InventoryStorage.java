@@ -6,7 +6,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -106,30 +105,21 @@ public class InventoryStorage implements IInventoryStorage
 	@Override
 	public List<ItemStack> getInventoryContents()
 	{
-		LinkedList<ItemStack> tempList = new LinkedList<ItemStack>();
-
-		for (ItemStack stack : items)
-		{
-			if (stack != null && stack.stackSize > 0)
-			{
-				tempList.addLast(stack);
-			}
-		}
-		return tempList;
+		return this.items;
 	}
 
 	@Override
 	public int getSizeInventory()
 	{
-		return maxSlots;
+		return this.maxSlots;
 	}
 
 	@Override
 	public boolean isEmpty()
 	{
-		for (int i = 0; i < getSizeInventory(); i++)
+		for (ItemStack stack : this.items)
 		{
-			if (items.get(i) != null)
+			if (stack != null)
 			{
 				return false;
 			}
@@ -140,14 +130,14 @@ public class InventoryStorage implements IInventoryStorage
 	@Override
 	public boolean isFull()
 	{
-		for (int i = 0; i < getSizeInventory(); i++)
+		for (ItemStack stack : this.items)
 		{
-			if (items.get(i) == null)
+			if (stack == null)
 			{
 				return false;
 			}
 
-			if (items.get(i).stackSize < items.get(i).getMaxStackSize())
+			if (stack.stackSize < stack.getMaxStackSize())
 			{
 				return false;
 			}
@@ -197,8 +187,15 @@ public class InventoryStorage implements IInventoryStorage
 	 */
 	public void onInventoryChanged()
 	{
-		items.retainAll(getInventoryContents());
 		items.ensureCapacity(getSizeInventory());
+		for (ItemStack stack : this.items)
+		{
+			if (stack != null && stack.stackSize <= 0)
+			{
+				this.items.set(this.items.indexOf(stack), null);
+			}
+
+		}
 	}
 
 	private static boolean isItemStackIdentical(ItemStack stack1, ItemStack stack2)

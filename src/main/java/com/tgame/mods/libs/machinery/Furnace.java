@@ -1,6 +1,5 @@
 package com.tgame.mods.libs.machinery;
 
-import com.tgame.mods.libs.inventory.IInventoryStorage;
 import com.tgame.mods.libs.inventory.simpleimpl.InventoryStorage;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.FurnaceRecipes;
@@ -82,13 +81,13 @@ public class Furnace implements IFurnace
 	}
 
 	@Override
-	public IInventoryStorage getInputInv()
+	public InventoryStorage getInputInv()
 	{
 		return this.input;
 	}
 
 	@Override
-	public IInventoryStorage getOutputInv()
+	public InventoryStorage getOutputInv()
 	{
 		return this.output;
 	}

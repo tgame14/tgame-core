@@ -1,7 +1,7 @@
 package com.tgame.mods.libs.machinery;
 
 import com.tgame.mods.interfaces.IDataObject;
-import com.tgame.mods.libs.inventory.IInventoryStorage;
+import com.tgame.mods.libs.inventory.simpleimpl.InventoryStorage;
 import net.minecraft.item.ItemStack;
 
 /**
@@ -12,7 +12,7 @@ public interface IFurnace extends IDataObject
 {
 	public void smelt(ItemStack stack);
 
-	public IInventoryStorage getInputInv();
+	public InventoryStorage getInputInv();
 
-	public IInventoryStorage getOutputInv();
+	public InventoryStorage getOutputInv();
 }
