@@ -15,6 +15,4 @@ public interface IProxy
 
 	public void postInit();
 
-	public String getModId();
-
 }

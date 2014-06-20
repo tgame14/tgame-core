@@ -5,6 +5,8 @@ import com.tgame.mods.libs.inventory.simpleimpl.InventoryStorage;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.FurnaceRecipes;
 import net.minecraft.nbt.NBTTagCompound;
+import org.apache.commons.lang3.tuple.ImmutablePair;
+import org.apache.commons.lang3.tuple.Pair;
 
 /**
  * @author tgame14
@@ -18,6 +20,10 @@ public class Furnace implements IFurnace
 	protected InventoryStorage input;
 	protected InventoryStorage output;
 
+	private boolean hasFuel;
+	private boolean isActive;
+	protected Pair<ItemStack, ItemStack> currentJob;
+
 	public Furnace(int burnTimePerItem, int currentItemBurnTime, int inputSlots, int outputSlots)
 	{
 		this.burnTicksPerItem = burnTimePerItem;
@@ -25,11 +31,35 @@ public class Furnace implements IFurnace
 
 		this.input = new InventoryStorage(inputSlots);
 		this.output = new InventoryStorage(outputSlots);
+
+		this.hasFuel = false;
+		this.currentJob = null;
 	}
 
 	public void updateFurnace()
 	{
+		if (canSmelt())
+		{
+			if (this.currentJob == null)
+			{
+				ItemStack candidate = this.getInputInv().extractItem(1, true);
+				ItemStack result = FurnaceRecipes.smelting().getSmeltingResult(candidate);
 
+				if (result != null)
+				{
+					this.currentJob = new ImmutablePair<ItemStack, ItemStack>(candidate, result);
+					this.currentItemBurnTicks = burnTicksPerItem;
+				}
+			}
+			else
+			{
+				if (isActive())
+				{
+					if (true);
+
+				}
+			}
+		}
 	}
 
 	public void smelt(ItemStack smelted)
@@ -39,6 +69,11 @@ public class Furnace implements IFurnace
 		this.output.insertItem(result, false);
 		this.input.extractItem(smelted, false);
 
+	}
+
+	public boolean canSmelt()
+	{
+		return this.hasFuel && !this.getInputInv().isEmpty() && !this.getOutputInv().isFull();
 	}
 
 	@Override
@@ -51,6 +86,16 @@ public class Furnace implements IFurnace
 	public IInventoryStorage getOutputInv()
 	{
 		return this.output;
+	}
+
+	public boolean hasFuel()
+	{
+		return hasFuel;
+	}
+
+	public void setHasFuel(boolean hasFuel)
+	{
+		this.hasFuel = hasFuel;
 	}
 
 	@Override
@@ -98,5 +143,15 @@ public class Furnace implements IFurnace
 	public void setCurrentItemBurnTicks(int currentItemBurnTicks)
 	{
 		this.currentItemBurnTicks = currentItemBurnTicks;
+	}
+
+	public boolean isActive()
+	{
+		return isActive;
+	}
+
+	public void setActive(boolean isActive)
+	{
+		this.isActive = isActive;
 	}
 }

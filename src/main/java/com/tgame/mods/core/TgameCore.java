@@ -5,6 +5,7 @@ import com.tgame.mods.config.ConfigHandler;
 import com.tgame.mods.config.ConfigScanner;
 import com.tgame.mods.interfaces.IMod;
 import com.tgame.mods.libs.multiblocks.MultiblockEventHandler;
+import com.tgame.mods.libs.network.netty.PacketManager;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.SidedProxy;
@@ -23,7 +24,7 @@ import net.minecraftforge.common.config.Configuration;
 public class TgameCore implements IMod
 {
 	@Mod.Instance(Settings.MODID)
-	private static TgameCore instance;
+	private static TgameCore INSTANCE;
 
 	@Config
 	private static int testField = 3;
@@ -31,15 +32,19 @@ public class TgameCore implements IMod
 	@SidedProxy(serverSide = "com.tgame.mods.core.CommonProxyBase", clientSide = "com.tgame.mods.core.ClientProxyBase")
 	public static CommonProxyBase proxy;
 
+	public PacketManager packetManager;
+
 	public TgameCore()
 	{
-
+		this.packetManager = new PacketManager();
 	}
 
 	@Override
 	@Mod.EventHandler
 	public void preInit(FMLPreInitializationEvent event)
 	{
+
+
 		ConfigScanner.instance().generateSets(event.getAsmData());
 		Settings.CONFIGURATION = new Configuration(event.getSuggestedConfigurationFile());
 
@@ -48,7 +53,6 @@ public class TgameCore implements IMod
 		MinecraftForge.EVENT_BUS.register(handler);
 
 		proxy.preInit();
-
 	}
 
 	@Override
