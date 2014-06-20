@@ -24,10 +24,10 @@ public class Furnace implements IFurnace
 	private boolean isActive;
 	protected Pair<ItemStack, ItemStack> currentJob;
 
-	public Furnace(int burnTimePerItem, int currentItemBurnTime, int inputSlots, int outputSlots)
+	public Furnace(int burnTimePerItem, int inputSlots, int outputSlots)
 	{
 		this.burnTicksPerItem = burnTimePerItem;
-		this.currentItemBurnTicks = currentItemBurnTime;
+		this.currentItemBurnTicks = this.burnTicksPerItem;
 
 		this.input = new InventoryStorage(inputSlots);
 		this.output = new InventoryStorage(outputSlots);
@@ -36,7 +36,7 @@ public class Furnace implements IFurnace
 		this.currentJob = null;
 	}
 
-	public void updateFurnace()
+	public boolean updateFurnace()
 	{
 		if (canSmelt())
 		{
@@ -49,17 +49,22 @@ public class Furnace implements IFurnace
 				{
 					this.currentJob = new ImmutablePair<ItemStack, ItemStack>(candidate, result);
 					this.currentItemBurnTicks = burnTicksPerItem;
+					return true;
 				}
 			}
 			else
 			{
 				if (isActive())
 				{
-					if (true);
-
+					if (this.currentItemBurnTicks <= 0)
+					{
+						this.smelt(this.currentJob.getLeft());
+						return true;
+					}
 				}
 			}
 		}
+		return false;
 	}
 
 	public void smelt(ItemStack smelted)
@@ -73,7 +78,7 @@ public class Furnace implements IFurnace
 
 	public boolean canSmelt()
 	{
-		return this.hasFuel && !this.getInputInv().isEmpty() && !this.getOutputInv().isFull();
+		return this.hasFuel() && !this.getInputInv().isEmpty() && !this.getOutputInv().isFull();
 	}
 
 	@Override
