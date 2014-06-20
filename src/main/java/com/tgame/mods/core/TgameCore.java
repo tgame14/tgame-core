@@ -24,7 +24,7 @@ import net.minecraftforge.common.config.Configuration;
 public class TgameCore implements IMod
 {
 	@Mod.Instance(Settings.MODID)
-	private static TgameCore INSTANCE;
+	public static TgameCore INSTANCE;
 
 	@Config
 	private static int testField = 3;
