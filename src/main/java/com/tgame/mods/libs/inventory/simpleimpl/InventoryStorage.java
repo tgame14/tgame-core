@@ -28,13 +28,6 @@ public class InventoryStorage implements IInventoryStorage
 	{
 		this.items = new ItemStack[maxSlots];
 		this.maxSlots = maxSlots;
-
-
-
-		System.out.println("QWERTY");
-		System.out.println("maxSlots = " + maxSlots);
-		System.out.println(this.items);
-		System.out.println(this.items.length);
 	}
 
 	@Override
@@ -157,11 +150,6 @@ public class InventoryStorage implements IInventoryStorage
 	{
 		onInventoryChanged();
 
-		System.out.println("QWERTY");
-		System.out.println("maxSlots = " + maxSlots);
-		System.out.println(this.items);
-		System.out.println(this.items.length);
-
 		NBTTagList tagList = new NBTTagList();
 
 		for (int i = 0; i < getSizeInventory(); i++)
@@ -179,12 +167,6 @@ public class InventoryStorage implements IInventoryStorage
 
 	public void readFromNBT(NBTTagCompound nbt)
 	{
-		this.maxSlots = nbt.getInteger("maxSlots");
-		this.items = new ItemStack[this.maxSlots];
-		System.out.println("QWERTY");
-		System.out.println(this.items);
-		System.out.println(this.items.length);
-
 		NBTTagList tagList = (NBTTagList) nbt.getTag("inventory");
 
 		for (int i = 0; i < tagList.tagCount(); i++)
