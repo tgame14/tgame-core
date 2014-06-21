@@ -5,7 +5,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -21,13 +21,20 @@ public class InventoryStorage implements IInventoryStorage
 	 * this list acts as the holding object of the itemstacks
 	 * the use of an arraylist is done to allow best interaction with {@code maxSlots} limit
 	 */
-	protected ArrayList<ItemStack> items;
+	protected ItemStack[] items;
 	protected int maxSlots;
 
 	public InventoryStorage(int maxSlots)
 	{
-		this.items = new ArrayList<ItemStack>(maxSlots);
+		this.items = new ItemStack[maxSlots];
 		this.maxSlots = maxSlots;
+
+
+
+		System.out.println("QWERTY");
+		System.out.println("maxSlots = " + maxSlots);
+		System.out.println(this.items);
+		System.out.println(this.items.length);
 	}
 
 	@Override
@@ -38,7 +45,7 @@ public class InventoryStorage implements IInventoryStorage
 		{
 			for (int i = 0; i < getSizeInventory(); i++)
 			{
-				ItemStack stack = items.get(i);
+				ItemStack stack = items[i];
 				if (stack != null)
 				{
 					if (isItemStackIdentical(stack, candidate))
@@ -54,7 +61,7 @@ public class InventoryStorage implements IInventoryStorage
 				}
 				else
 				{
-					items.set(i, candidate);
+					items[i] = candidate;
 					return candidate;
 				}
 			}
@@ -69,9 +76,9 @@ public class InventoryStorage implements IInventoryStorage
 		candidate.stackSize = 0;
 		if (!isEmpty())
 		{
-			for (int i = 0; i < items.size(); i++)
+			for (int i = 0; i < items.length; i++)
 			{
-				ItemStack stack = items.get(i);
+				ItemStack stack = items[i];
 				if (isItemStackIdentical(stack, candidate))
 				{
 					int prevSize = stack.stackSize;
@@ -105,7 +112,7 @@ public class InventoryStorage implements IInventoryStorage
 	@Override
 	public List<ItemStack> getInventoryContents()
 	{
-		return this.items;
+		return Arrays.asList(this.items);
 	}
 
 	@Override
@@ -149,14 +156,20 @@ public class InventoryStorage implements IInventoryStorage
 	public void writeToNBT(NBTTagCompound nbt)
 	{
 		onInventoryChanged();
+
+		System.out.println("QWERTY");
+		System.out.println("maxSlots = " + maxSlots);
+		System.out.println(this.items);
+		System.out.println(this.items.length);
+
 		NBTTagList tagList = new NBTTagList();
 
 		for (int i = 0; i < getSizeInventory(); i++)
 		{
-			if (items.get(i) != null)
+			if (items[i] != null)
 			{
 				NBTTagCompound data = new NBTTagCompound();
-				items.get(i).writeToNBT(data);
+				items[i].writeToNBT(data);
 				tagList.appendTag(data);
 			}
 		}
@@ -167,14 +180,17 @@ public class InventoryStorage implements IInventoryStorage
 	public void readFromNBT(NBTTagCompound nbt)
 	{
 		this.maxSlots = nbt.getInteger("maxSlots");
-		this.items = new ArrayList<ItemStack>(this.maxSlots);
+		this.items = new ItemStack[this.maxSlots];
+		System.out.println("QWERTY");
+		System.out.println(this.items);
+		System.out.println(this.items.length);
 
 		NBTTagList tagList = (NBTTagList) nbt.getTag("inventory");
 
 		for (int i = 0; i < tagList.tagCount(); i++)
 		{
 			NBTTagCompound tag = tagList.getCompoundTagAt(i);
-			items.set(i, ItemStack.loadItemStackFromNBT(tag));
+			items[i] = ItemStack.loadItemStackFromNBT(tag);
 		}
 		onInventoryChanged();
 
@@ -187,12 +203,12 @@ public class InventoryStorage implements IInventoryStorage
 	 */
 	public void onInventoryChanged()
 	{
-		items.ensureCapacity(getSizeInventory());
-		for (ItemStack stack : this.items)
+		for (int i = 0; i < this.items.length; i++)
 		{
+			ItemStack stack = this.items[i];
 			if (stack != null && stack.stackSize <= 0)
 			{
-				this.items.set(this.items.indexOf(stack), null);
+				this.items[i] = null;
 			}
 
 		}
