@@ -22,6 +22,11 @@ public class TileInventoryHandler extends TileEntity implements IInventoryHandle
 		this.inv = new InventoryStorage(1);
 	}
 
+	public TileInventoryHandler(int size)
+	{
+		this.inv = new InventoryStorage(size);
+	}
+
 	@Override
 	public void readFromNBT(NBTTagCompound nbt)
 	{
