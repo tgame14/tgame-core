@@ -19,7 +19,7 @@ public class InventoryStorage implements IInventoryStorage
 {
 	/**
 	 * this list acts as the holding object of the itemstacks
-	 * the use of an arraylist is done to allow best interaction with {@code maxSlots} limit
+	 * the use of an array is done to allow best interaction with {@code maxSlots} limit
 	 */
 	protected ItemStack[] items;
 	protected int maxSlots;
@@ -112,6 +112,15 @@ public class InventoryStorage implements IInventoryStorage
 	public int getSizeInventory()
 	{
 		return this.maxSlots;
+	}
+
+	public void setMaxSlots(int maxSlots)
+	{
+		this.maxSlots = maxSlots;
+
+		ItemStack[] newItems = new ItemStack[this.maxSlots];
+		System.arraycopy(this.items, 0, newItems, 0, Math.min(this.maxSlots, this.items.length));
+		this.items = newItems;
 	}
 
 	@Override
