@@ -1,4 +1,4 @@
-package com.tgame.mods.libs.prefabs.items;
+package com.tgame.mods.prefabs.items;
 
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;

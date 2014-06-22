@@ -63,7 +63,8 @@ public class MultiblockEventHandler
 		MultiblockRegistry.instance().onChunkLoaded(world, chunk.xPosition, chunk.zPosition);
 	}
 
-	public void onWorldUnload(WorldEvent.Load event)
+	@SubscribeEvent
+	public void onWorldUnload(WorldEvent.Unload event)
 	{
 		World world = event.world;
 		MultiblockRegistry.instance().onWorldUnloaded(world);
