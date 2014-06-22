@@ -57,7 +57,7 @@ public class Furnace implements IFurnace
 				{
 					if (this.currentItemBurnTicks <= 0)
 					{
-						this.smelt(this.currentJob.getLeft());
+						this.smelt();
 						return true;
 					}
 				}
@@ -66,12 +66,11 @@ public class Furnace implements IFurnace
 		return false;
 	}
 
-	public void smelt(ItemStack smelted)
+	public void smelt()
 	{
-		ItemStack result = FurnaceRecipes.smelting().getSmeltingResult(smelted);
-
-		this.output.insertItem(result, false);
-		this.input.extractItem(smelted, false);
+		this.output.insertItem(this.currentJob.getRight(), false);
+		this.input.extractItem(this.currentJob.getLeft(), false);
+		this.currentJob = null;
 
 	}
 
