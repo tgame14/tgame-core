@@ -1,8 +1,8 @@
 package com.tgame.mods.libs.multiblocks.grid;
 
 import com.tgame.mods.libs.multiblocks.WorldPos;
+import com.tgame.mods.prefabs.tiles.TGTileBase;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
 
 import java.util.Set;
 
@@ -10,7 +10,7 @@ import java.util.Set;
  * @author tgame14
  * @since 23/05/14
  */
-public abstract class AbstractMultiblockNode extends TileEntity
+public abstract class AbstractMultiblockNode extends TGTileBase
 {
 
 	protected GridController controller;
