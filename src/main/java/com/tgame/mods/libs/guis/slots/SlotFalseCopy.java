@@ -22,14 +22,12 @@ public class SlotFalseCopy extends Slot
 	@Override
 	public boolean canTakeStack(EntityPlayer player)
 	{
-
 		return false;
 	}
 
 	@Override
 	public boolean isItemValid(ItemStack stack)
 	{
-
 		return true;
 	}
 

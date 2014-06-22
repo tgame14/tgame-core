@@ -122,7 +122,7 @@ public class ComponentButton extends ComponentBase
 
 		if (isEnabled())
 		{
-			gui.handleElementButtonClick(getName(), mouseButton);
+			gui.handleComponentButtonClick(getName(), mouseButton);
 			return true;
 		}
 		return false;

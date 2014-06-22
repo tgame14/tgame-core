@@ -28,7 +28,7 @@ import java.util.List;
  * @author tgame14
  * @since 22/06/2014
  */
-public class GuiBase extends GuiContainer
+public abstract class GuiBase extends GuiContainer
 {
 	public static final SoundHandler guiSoundHandler = FMLClientHandler.instance().getClient().getSoundHandler();
 
@@ -77,7 +77,7 @@ public class GuiBase extends GuiContainer
 	public void drawScreen(int x, int y, float partialTick)
 	{
 
-		updateElementInformation();
+		updateComponentInformation();
 
 		super.drawScreen(x, y, partialTick);
 
@@ -89,7 +89,7 @@ public class GuiBase extends GuiContainer
 		mouseX = x - guiLeft;
 		mouseY = y - guiTop;
 
-		updateElements();
+		updateComponents();
 	}
 
 	@Override
@@ -102,7 +102,7 @@ public class GuiBase extends GuiContainer
 			fontRendererObj.drawString(StatCollector.translateToLocal("container.inventory"), 8, ySize - 96 + 3, 0x404040);
 		}
 
-		drawElements(0, true);
+		drawComponents(0, true);
 	}
 
 	@Override
@@ -118,7 +118,7 @@ public class GuiBase extends GuiContainer
 
 		GL11.glPushMatrix();
 		GL11.glTranslatef(guiLeft, guiTop, 0.0F);
-		drawElements(partialTick, false);
+		drawComponents(partialTick, false);
 		GL11.glPopMatrix();
 	}
 
@@ -266,19 +266,19 @@ public class GuiBase extends GuiContainer
 	}
 
 	/**
-	 * Draws the elements for this GUI.
+	 * Draws the Components for this GUI.
 	 */
-	protected void drawElements(float partialTick, boolean foreground)
+	protected void drawComponents(float partialTick, boolean foreground)
 	{
 
 		if (foreground)
 		{
 			for (int i = 0; i < components.size(); i++)
 			{
-				ComponentBase element = components.get(i);
-				if (element.isVisible())
+				ComponentBase component = components.get(i);
+				if (component.isVisible())
 				{
-					element.drawForeground(mouseX, mouseY);
+					component.drawForeground(mouseX, mouseY);
 				}
 			}
 		}
@@ -311,23 +311,23 @@ public class GuiBase extends GuiContainer
 
 	public void addTooltips(List<String> tooltip)
 	{
-		ComponentBase element = getElementAtPosition(mouseX, mouseY);
+		ComponentBase Component = getComponentAtPosition(mouseX, mouseY);
 
-		if (element != null)
+		if (Component != null)
 		{
-			element.addTooltip(tooltip);
+			Component.addTooltip(tooltip);
 		}
 	}
 
 	/* ELEMENTS */
-	public ComponentBase addElement(ComponentBase element)
+	public ComponentBase addComponent(ComponentBase Component)
 	{
 
-		components.add(element);
-		return element;
+		components.add(Component);
+		return Component;
 	}
 
-	protected ComponentBase getElementAtPosition(int mX, int mY)
+	protected ComponentBase getComponentAtPosition(int mX, int mY)
 	{
 
 		for (int i = components.size(); i-- > 0; )
@@ -341,7 +341,7 @@ public class GuiBase extends GuiContainer
 		return null;
 	}
 
-	protected final void updateElements()
+	protected final void updateComponents()
 	{
 
 		for (int i = components.size(); i-- > 0; )
@@ -354,12 +354,12 @@ public class GuiBase extends GuiContainer
 		}
 	}
 
-	protected void updateElementInformation()
+	protected void updateComponentInformation()
 	{
 
 	}
 
-	public void handleElementButtonClick(String buttonName, int mouseButton)
+	public void handleComponentButtonClick(String buttonName, int mouseButton)
 	{
 
 	}
