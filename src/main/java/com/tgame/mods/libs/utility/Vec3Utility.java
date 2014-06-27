@@ -71,7 +71,7 @@ public class Vec3Utility
 		//Vec3 reachPoint = Vec3.createVectorHelper(startingPosition.xCoord + look.xCoord * reachDistance, startingPosition.yCoord + look.yCoord * reachDistance, startingPosition.zCoord + look.zCoord * reachDistance);
 
 		double checkBorder = 1.1 * reachDistance;
-		AxisAlignedBB boxToScan = AxisAlignedBB.getAABBPool().getAABB(-checkBorder, -checkBorder, -checkBorder, checkBorder, checkBorder, checkBorder).offset(origin.xCoord, origin.yCoord, origin.zCoord);
+		AxisAlignedBB boxToScan = AxisAlignedBB.getBoundingBox(-checkBorder, -checkBorder, -checkBorder, checkBorder, checkBorder, checkBorder).offset(origin.xCoord, origin.yCoord, origin.zCoord);
 
 		@SuppressWarnings("unchecked")
 		List<Entity> entitiesInBounds = world.getEntitiesWithinAABBExcludingEntity(null, boxToScan);
