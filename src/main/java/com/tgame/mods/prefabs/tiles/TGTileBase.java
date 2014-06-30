@@ -47,4 +47,13 @@ public class TGTileBase extends TileEntity
 	{
 		this.getWorldObj().setBlockMetadataWithNotify(this.xCoord, this.yCoord, this.zCoord, dir.ordinal(), 3);
 	}
+
+	public void blockBroken()
+	{
+	}
+
+	public int getComparatorInput(int side)
+	{
+		return 0;
+	}
 }

@@ -41,6 +41,7 @@ else
 
 dependencies {
     testCompile group: 'junit', name: 'junit', version: '4.11'
+    compile group: 'CodeChickenLib', version: "${config.minecraft_version}-${config.ccl_version}", classifier: 'dev'
 }
 
 minecraft {

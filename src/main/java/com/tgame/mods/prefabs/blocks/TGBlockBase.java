@@ -12,6 +12,22 @@ public class TGBlockBase extends Block
 	protected TGBlockBase(Material material)
 	{
 		super(material);
-		this.setHardness(1.0F);
+
+		this.setHardness(1.5F);
+		this.setStepSound(soundTypeStone);
 	}
+
+	@Override
+	public int damageDropped(int i) {
+
+		return i;
+	}
+
+	@Override
+	public boolean renderAsNormalBlock()
+	{
+		return false;
+	}
+
+
 }
