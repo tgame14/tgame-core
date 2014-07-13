@@ -25,6 +25,7 @@ configFile.withReader {
     ext.config = new ConfigSlurper().parse prop
 }
 
+apply plugin: 'idea'
 apply plugin: 'forge'
 apply plugin: 'curseforge'
 apply plugin: 'maven-publish'
@@ -41,7 +42,7 @@ else
 
 dependencies {
     testCompile group: 'junit', name: 'junit', version: '4.11'
-    compile group: 'CodeChickenLib', version: "${config.minecraft_version}-${config.ccl_version}", classifier: 'dev'
+    //compile group: 'CodeChickenLib', version: "${config.minecraft_version}-${config.ccl_version}", classifier: 'dev'
 }
 
 minecraft {
@@ -49,13 +50,6 @@ minecraft {
     assetDir = "eclipse/assets"
     replace "@AUTHOR@", config.author_name
     replace "@VERSION@", project.version
-}
-
-curse {
-    printf "publishing to curse"
-    apiKey = project.CURSE_API_KEY
-    projectId = "220454"
-    releaseType = project.RELEASE_CHANNEL
 }
 
 task copyProperties(type: Copy) {
@@ -79,7 +73,7 @@ task deobfJar(type: Jar) {
 
 task release () {
     dependsOn 'build'
-    dependsOn 'curse'
+    //dependsOn 'curse'
 }
 
 publishing {
@@ -103,7 +97,7 @@ publishing {
     }
     repositories {
         maven {
-            url "file://var/www/maven"
+            url "http://maven.apache.org"
         }
     }
 }
