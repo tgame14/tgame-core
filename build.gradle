@@ -35,8 +35,8 @@ version = config.mod_version
 group = "com.tgame.mods" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "tgame-core"
 
-if (System.getenv().BUILD_NUMBER != null)
-    version += ".${System.getenv().BUILD_NUMBER}"
+if (System.getenv().BUILD_ID != null)
+    version += ".${System.getenv().ID}"
 else
     version += " - err"
 
