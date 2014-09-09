@@ -73,7 +73,8 @@ task deobfJar(type: Jar) {
 
 task release () {
     dependsOn 'build'
-    //dependsOn 'curse'
+    //dependsOn 'curse' to re-add to have publishment to curse
+
 }
 
 publishing {
@@ -97,7 +98,7 @@ publishing {
     }
     repositories {
         maven {
-            url "http://maven.apache.org"
+            url "file://var/www/maven"
         }
     }
 }
